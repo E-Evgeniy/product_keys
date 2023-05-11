@@ -7,11 +7,15 @@ const ProductKeyForm = (props) => {
 
     const [loading, setloading] = useState(true)
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
+    const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
     const [value, setValue] = useState('');
     const [inputVolumeKeys, setInputVolumeKeys] = useState(1)
     const [inputDuration, setInputDuration] = useState(1)
     const [inputComment, setInputComment] = useState('')
+    const [inputTypeKey, setInputTypeKey] = useState('')
     const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
+    const [volumeFromTable, setVolumeFromTable] = useState(true)
+    const [durationFromTable, setDurationFromTable] = useState(true)
 
     const [searchFilelds, setSearchFilelds] = useState('')
 
@@ -28,6 +32,9 @@ const ProductKeyForm = (props) => {
             .then(response => response.json())
             .then(data => {
                 setLoadedTypesOfKeys(data["names_types_of_keys"])
+                setLoadedIdTypesOfKeys(data["id_types_of_keys"])
+                setInputTypeKey(data["id_types_of_keys"][0])
+
                 setloading(false)
             }
             );
@@ -41,8 +48,8 @@ const ProductKeyForm = (props) => {
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
-                console.log(data) 
-                console.log('dddddd')        
+                setVolumeFromTable(data["rec_volume_keys"])
+                setDurationFromTable(data["rec_duration_keys"])
                 setloading(false)
             }
             );
@@ -51,51 +58,75 @@ const ProductKeyForm = (props) => {
     const createProductKey = () => {
 
         fetch(`/api/v1/product_keys/`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", },
-          body: JSON.stringify({
-            productKey: {
-                volumeKeys: inputVolumeKeys,
-                duration: inputDuration,
-                infiniteKey: inputInfiniteKey,
-                typeKey: inputTypeKey,
-                comment: inputComment, 
-             },
-          }),
+            method: "POST",
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify({
+                productKey: {
+                    volumeKeys: inputVolumeKeys,
+                    duration: inputDuration,
+                    infinite_period: inputInfiniteKey,
+                    types_of_key_id: inputTypeKey,
+                    comment: inputComment,
+                    client_id: props.client_id
+                },
+            }),
         })
-        .then((response) => {
-          if (response.ok) {
-            return response.json()
-          }
-        })
-        .then((data) => console.log(data.message))
-        .catch((error) => console.error(error));
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                }
+            })
+            .then((data) => console.log(data.message))
+            .catch((error) => console.error(error));
         setloading(true)
-        window.open('/clients')
-      };
+        window.location.replace(`/clients/${props.client_id}`);
+    };
 
-      const onChangeInputVolumeKeys = (e) => {
+    const onChangeInputVolumeKeys = (e) => {
         setInputVolumeKeys(e.target.value);
         setSearchFilelds(e.target.value);
-      }
-  
-      const onChangeInputDuration = (e) => {
+    }
+
+    const onChangeInputDuration = (e) => {
         setInputDuration(e.target.value);
         setSearchFilelds(e.target.value);
-      }
+    }
 
-      
-      function changeCheckbox() {
+    function changeCheckbox() {
         setInputInfiniteKey(!inputInfiniteKey);
-     }
+    }
 
-      const onSearchTextChangeInputComment = (e) => {
+    const onSearchTextChangeInputComment = (e) => {
         setInputComment(e.target.value);
-      }
+    }
 
     const loadingSection = (<div>{t('description.loading')}</div>)
 
     let classNameButton = "hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none disabled:opacity-75"
+
+    let disableButton = false
+    if (volumeFromTable == false || durationFromTable == false) {
+        disableButton = true
+    }
+
+    let classVolumeError = "text-red-600"
+
+    if (volumeFromTable) {
+        classVolumeError = "invisible"
+    }
+
+    let classDurationError = "text-red-600"
+
+    if (durationFromTable) {
+        classDurationError = "invisible"
+    }
+
+    let changeTypeKey = (e) => {
+        setValue(e.target.value)
+        setInputTypeKey(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)]);
+        console.log(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)])
+    }
+
 
     const dataSection = (
 
@@ -119,9 +150,10 @@ const ProductKeyForm = (props) => {
                             onChange={onChangeInputVolumeKeys}
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
+                        <div className={classVolumeError}>{t('description.error1_volume_keys')}</div>
                     </div>
                 </div>
-                <br></br>
+
                 <div className="-mx-3 flex flex-wrap">
                     <div className="mb-5 w-full px-3 sm:w-2/3">
                         <label
@@ -140,29 +172,30 @@ const ProductKeyForm = (props) => {
                             onChange={onChangeInputDuration}
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
+                        <div className={classDurationError}>{t('description.error1_duration_keys')}</div>
                     </div>
                 </div>
-                <br></br>
+
                 <div className="mb-5">
                     <div className="mb-3 block text-base font-medium text-[#07074D]">
-                    
-                    <input
-                     type="checkbox"
-                     checked={inputInfiniteKey}
-                     onChange={changeCheckbox}
-                     className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded mr-2" />
-                     
-                     {t('description.infinite_key')}
 
-                        
+                        <input
+                            type="checkbox"
+                            checked={inputInfiniteKey}
+                            onChange={changeCheckbox}
+                            className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded mr-2" />
+
+                        {t('description.infinite_key')}
+
+
                     </div>
-                    
-                    
+
+
                     <br></br>
                     <div className="mb-5 block text-base font-medium text-[#07074D]">
                         <p>{t('description.select_type_key')}</p>
                         <br></br>
-                        <select className="p-1 px-2 outline-none w-2/3 bg-white" value={value} onChange={(event) => setValue(event.target.value)}>
+                        <select className="p-1 px-2 outline-none w-2/3 bg-white" value={value} onChange={changeTypeKey}>
                             {options}
                         </select>
 
@@ -192,8 +225,9 @@ const ProductKeyForm = (props) => {
 
                 <div>
                     <button
-                        className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                        className={classNameButton}
                         onClick={() => createProductKey()}
+                        disabled={disableButton}
                     >
                         {t('description.create_product_key')}
                     </button>
@@ -202,14 +236,7 @@ const ProductKeyForm = (props) => {
         </div>
     )
 
-
-
-    if (loading) {
-        return dataSection
-    } else {
-        return dataSection
-    }
-
+    return dataSection
 
 }
 

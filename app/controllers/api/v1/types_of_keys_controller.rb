@@ -65,11 +65,13 @@ module Api
 
       def names_types_keys
         names_types_of_keys = []
+        id_types_of_keys = []
         TypesOfKey.order(name: :asc).each do |types_of_key|
           names_types_of_keys << types_of_key.name
+          id_types_of_keys << types_of_key.id
         end
 
-        render(json: { names_types_of_keys: })
+        render(json: { names_types_of_keys:, id_types_of_keys: })
       end
 
       private
