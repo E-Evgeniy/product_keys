@@ -8,7 +8,7 @@ class ProductKey < ApplicationRecord
   belongs_to :types_of_key
   validates :name, presence: true, uniqueness: true
 
-  scope :name_exist, ->(name) { where(name: name) }
+  scope :name_exist, ->(name) { where(name:) }
 
   def create
     product_key = ProductKey.new

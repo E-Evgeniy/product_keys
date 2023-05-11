@@ -80,7 +80,17 @@ i18n
                 edit_type_of_key: 'Редактировать тип ключа',
                 create_type_of_key: 'Создать новый тип ключа',
                 active_keys: 'Активные ключи',
-                all_keys: 'Всего ключей'
+                all_keys: 'Всего ключей',
+                volume_keys: 'Количество необходимых лицензий',
+                volume_days: 'Срок действия лицензии в днях',
+                infinite_key: 'Сделать ключ бессрочным',
+                yes: 'Да',
+                no: 'Нет',
+                select_type_key: 'Выберите тип ключа',
+                create_product_key: 'Создать',
+                create_key_for_client: 'Создание лицензии для ',
+                error1_volume_keys: 'Количество лицензий должно быть целым числом и больше нуля',
+                error1_duration_keys: 'Срок действия должен быть целым числом и больше нуля'
 
               }
           // here we will place our translations...

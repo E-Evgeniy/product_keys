@@ -31,7 +31,7 @@ const ClientForm = () => {
       .then((data) => console.log(data.message))
       .catch((error) => console.error(error));
       setloading(true)
-      window.open('/clients')
+      window.location.replace('/clients')
     };
 
 

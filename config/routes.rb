@@ -30,5 +30,7 @@ Rails.application.routes.draw do
     end
   end
 
+  get "/api/v1/product_key/check_fields", to: "api/v1/product_keys#checkfields"
+
   get "*path", to: "react#home"
 end
