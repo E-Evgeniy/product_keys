@@ -17,6 +17,7 @@ import ClientEdit from "./components/clients/client_edit"
 import TypesOfKeys from "./components/types_of_keys/types_of_keys"
 import TypeOfKeyNew from "./components/types_of_keys/type_of_key_new"
 import TypeOfKeyEdit from "./components/types_of_keys/type_of_key_edit"
+import ProductKeyNew from "./components/product_keys/product_keys_new"
 
 function App() {
     return (
@@ -32,6 +33,7 @@ function App() {
                 <Route path="types_of_keys/" element={<TypesOfKeys />} />
                 <Route path="types_of_keys/new" element={<TypeOfKeyNew />} />
                 <Route path="types_of_keys/:id/edit" element={<TypeOfKeyEdit />} />
+                <Route path="clients/:client_id/product_keys/new" element={<ProductKeyNew />} />
             </Routes>
             </BrowserRouter>
         </div>

@@ -1,0 +1,18 @@
+const [value, setValue] = useState('');
+
+  const ar = [1,2,3,4]
+
+   function chengeSelect() {
+      setValue(event.target.value);
+   }
+
+   return <div>
+      <select value={value} onChange={chengeSelect}>
+      {ar.map(a => (
+        <option>{a}</option>
+      ))}
+      </select>
+      <p>
+         Выбрана опция: {value}
+      </p>
+   </div>;

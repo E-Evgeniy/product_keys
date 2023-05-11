@@ -80,7 +80,15 @@ i18n
                 edit_type_of_key: 'Редактировать тип ключа',
                 create_type_of_key: 'Создать новый тип ключа',
                 active_keys: 'Активные ключи',
-                all_keys: 'Всего ключей'
+                all_keys: 'Всего ключей',
+                volume_keys: 'Количество необходимых лицензий',
+                volume_days: 'Срок действия лицензии в днях',
+                infinite_key: 'Сделать ключ бессрочным',
+                yes: 'Да',
+                no: 'Нет',
+                select_type_key: 'Выберите тип ключа',
+                create_product_key: 'Создать ключ',
+                create_key_for_client: 'Создание лицензии для '
 
               }
           // here we will place our translations...
