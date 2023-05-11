@@ -87,7 +87,7 @@ i18n
                 yes: 'Да',
                 no: 'Нет',
                 select_type_key: 'Выберите тип ключа',
-                create_product_key: 'Создать ключ',
+                create_product_key: 'Создать',
                 create_key_for_client: 'Создание лицензии для ',
                 error1_volume_keys: 'Количество лицензий должно быть целым числом и больше нуля',
                 error1_duration_keys: 'Срок действия должен быть целым числом и больше нуля'

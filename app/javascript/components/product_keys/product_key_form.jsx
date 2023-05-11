@@ -5,27 +5,21 @@ import { useTranslation } from 'react-i18next';
 const ProductKeyForm = (props) => {
     const { t } = useTranslation();
 
-    const [loading, setloading] = useState(true)
-    const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
-    const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
+    const [loading, setloading] = useState(true)    
     const [value, setValue] = useState('');
     const [inputVolumeKeys, setInputVolumeKeys] = useState(1)
     const [inputDuration, setInputDuration] = useState(1)
     const [inputComment, setInputComment] = useState('')
     const [inputTypeKey, setInputTypeKey] = useState('')
-    const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
-    const [volumeFromTable, setVolumeFromTable] = useState(true)
-    const [durationFromTable, setDurationFromTable] = useState(true)
-
+    const [inputInfiniteKey, setInputInfiniteKey] = useState(false);    
     const [searchFilelds, setSearchFilelds] = useState('')
 
-    const options = loadedTypesOfKeys.map((typeKey, index) => {
-        return <option key={index}>{typeKey}</option>;
-    });
 
+    const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
+    const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
+    
     useEffect(() => {
-        //Hit the server and get the places
-
+        //Load types_of_keys
         const apiEndpoint = "/api/v1/type_of_key/names_types_keys"
 
         fetch(apiEndpoint)
@@ -34,14 +28,20 @@ const ProductKeyForm = (props) => {
                 setLoadedTypesOfKeys(data["names_types_of_keys"])
                 setLoadedIdTypesOfKeys(data["id_types_of_keys"])
                 setInputTypeKey(data["id_types_of_keys"][0])
-
                 setloading(false)
             }
             );
     }, [loading])
 
+    const options = loadedTypesOfKeys.map((typeKey, index) => {
+        return <option key={index}>{typeKey}</option>;
+    });
+
+
+    const [volumeFromTable, setVolumeFromTable] = useState(true)
+    const [durationFromTable, setDurationFromTable] = useState(true)
     useEffect(() => {
-        //Hit the server and get the places
+        //Check input parametrs
 
         const apiEndpoint = `/api/v1/product_key/check_fields?inputVolumeKeys=${inputVolumeKeys}&inputDurationKeys=${inputDuration}`
 
@@ -55,6 +55,7 @@ const ProductKeyForm = (props) => {
             );
     }, [searchFilelds])
 
+    // Create key
     const createProductKey = () => {
 
         fetch(`/api/v1/product_keys/`, {
@@ -100,8 +101,6 @@ const ProductKeyForm = (props) => {
         setInputComment(e.target.value);
     }
 
-    const loadingSection = (<div>{t('description.loading')}</div>)
-
     let classNameButton = "hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none disabled:opacity-75"
 
     let disableButton = false
@@ -126,7 +125,6 @@ const ProductKeyForm = (props) => {
         setInputTypeKey(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)]);
         console.log(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)])
     }
-
 
     const dataSection = (
 
