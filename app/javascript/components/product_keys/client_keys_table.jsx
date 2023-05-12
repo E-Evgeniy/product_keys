@@ -2,57 +2,38 @@ import React, { useState, useEffect, Component } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
-export default function ClientsTable() {
-    const [loading, setloading] = useState(true)
-    const [loadedClients, setLoadedClients] = useState([])
+export default function ClientKeysTable(props) {
+    const [loading, setloading] = useState(false)
+    const [nameClient, setNameClient] = useState('')
     const { t } = useTranslation();
 
     useEffect(() => {
-        //Hit the server and get the places
+        //Request client's name
 
-        const apiEndpoint = "/api/v1/clients"
+        const apiEndpoint = "/api/v1/clients/" + props.client_id
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setNameClient(data["client"].name)
+            }
+            );
+    }, [])
+
+    useEffect(() => {
+        //Request on client keys
+
+        const apiEndpoint = `/api/v1/client/product_keys?client_id=${props.client_id}&showKeys=${props.show_keys}`  
 
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
-                console.log(data["clients"])
+                console.log(data)
                 setLoadedClients(data["clients"])
                 setloading(false)
             }
             );
     }, [loading])
 
-    const deleteClient = async (id) => {
-        await fetch(`/api/v1/clients/${id}`, {
-            method: 'DELETE',
-        }).then((response) => {
-            if (response.status === 200) {
-                setPosts(
-                    clients.filter((client) => {
-                        return client.id !== id;
-                    })
-                );
-            } else {
-                return;
-            }
-        });
-        setloading(true)
-    };
-
-    const editClient = async (id) => {
-        window.location.assign(`clients/${id}/edit`)        
-    };
-
-    const loadingSection = (<div>{t('description.loading')}</div>)
-
-    const output_date = (volume_date) => {
-        let output_time = volume_date.split('T')[1]
-        output_time = output_time.split(':')[0] + ':' + output_time.split(':')[1]
-
-        return (
-            volume_date.split('T')[0] + ' ' + output_time
-        )
-    }
 
     const dataSection = (
 
@@ -60,7 +41,7 @@ export default function ClientsTable() {
 
             <div className=" flex items-center justify-between pb-6">
                 <div>
-                    <h2 className="text-gray-600 font-semibold">{t('description.clients')}</h2>
+                    <h2 className="text-gray-600 font-semibold"> {`${t('description.product_keys')} ${nameClient}`}</h2>
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="flex bg-gray-50 items-center p-2 rounded-md">
@@ -83,7 +64,7 @@ export default function ClientsTable() {
                                     </th>
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        {t('description.email')}
+                                        {t('description.day_end_key')}
                                     </th>
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -91,15 +72,11 @@ export default function ClientsTable() {
                                     </th>
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        {t('description.type_of_key')}
+                                    </th>
+                                    <th
+                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.date_created')}
-                                    </th>
-                                    <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        {t('description.active_keys')}
-                                    </th>
-                                    <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        {t('description.all_keys')}
                                     </th>
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -107,69 +84,7 @@ export default function ClientsTable() {
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {loadedClients.map((client, index) => {
-                                    return (
-                                        <tr key={client.id}>
-
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div className="text-gray-900 whitespace-no-wrap">
-                                                    <Link to={String(client.id)}>{client.name}</Link>
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <p className="text-gray-900 whitespace-no-wrap">{client.email}</p>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div className="text-gray-900 whitespace-no-wrap">
-                                                    {client.comment}
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div className="text-gray-900 whitespace-no-wrap">
-                                                    {output_date(client.created_at)}
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div className="text-gray-900 whitespace-no-wrap">
-                                                    {client.all_keys}
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div className="text-gray-900 whitespace-no-wrap">
-                                                <Link to={String(client.id)}>{client.name}</Link>
-                                                </div>
-                                            </td>
-
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div className="text-gray-900 whitespace-no-wrap">
-
-                                                    <div className="flex items-stretch ...">
-
-                                                        <button
-                                                            onClick={() => editClient(client.id)}
-                                                            className='relative inline-flex text-sx sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-        text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#4040F2] mx-1 px-4 py-1 xs:py-1.5 xs:px-5'
-
-                                                        >
-                                                            {t('description.edit')}
-                                                        </button>
-
-
-                                                        <button
-                                                            className='relative inline-flex text-xs sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-        text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
-                                                            onClick={() => deleteClient(client.id)}
-                                                        >
-                                                            {t('description.delete')}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
+                           
                         </table>
                     </div>
                 </div>

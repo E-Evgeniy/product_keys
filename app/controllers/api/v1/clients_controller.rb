@@ -80,6 +80,14 @@ module Api
         render(json: { client:, client_edit: })
       end
 
+      def client_keys
+        client = Client.find(params[:client_id])
+        if params[:showKeys] == "all"
+          product_keys = client.product_keys
+        end
+        render(json: { product_keys: })
+      end
+
       private
 
       def validates_client(inputName, inputEmail)

@@ -90,7 +90,11 @@ i18n
                 create_product_key: 'Создать',
                 create_key_for_client: 'Создание лицензии для ',
                 error1_volume_keys: 'Количество лицензий должно быть целым числом и больше нуля',
-                error1_duration_keys: 'Срок действия должен быть целым числом и больше нуля'
+                error1_duration_keys: 'Срок действия должен быть целым числом и больше нуля',
+                product_keys: 'Ключи',
+                day_end_key: 'Дней до дезактивации ключа',
+                key_status: 'Статус ключа',
+                
 
               }
           // here we will place our translations...

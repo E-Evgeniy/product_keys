@@ -8,7 +8,7 @@ export default function ClientsTable() {
     const { t } = useTranslation();
 
     useEffect(() => {
-        //Hit the server and get the places
+        //Get clients
 
         const apiEndpoint = "/api/v1/clients"
 

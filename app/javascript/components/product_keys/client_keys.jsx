@@ -1,12 +1,17 @@
 import React from "react";
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
+
+import ClientKeysTable from "./client_keys_table"
 
 
 
 const ClientKeys = () => {
     const { t } = useTranslation();
-    let show_keys = useLocation().pathname.split('showKeys=')[1];
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    let client_id = useLocation().pathname.split('clients/')[1];
+    client_id = client_id.split('/product_keys')[0];
 
     return (
         <div>        
@@ -27,7 +32,7 @@ const ClientKeys = () => {
 
                         <div className="h-70 col-span-6 bg-gradient-to-tr from-indigo-400 to-indigo-100 rounded-md h-100">
 
-                        < ClientKeysTable client_id={client_id} />
+                        < ClientKeysTable show_keys={searchParams.get("showKeys")} client_id ={client_id}/>
     
 
                         </div>

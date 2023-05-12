@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   root to: "react#home"
   get "/api/v1/client/find", to: "api/v1/clients#find"
   get "api/v1/client/find_for_edit", to: "api/v1/clients#find_for_edit"
+  get "/api/v1/client/product_keys", to: "api/v1/clients#client_keys"
 
   namespace :api do
     namespace :v1 do
