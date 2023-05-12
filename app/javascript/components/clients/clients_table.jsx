@@ -15,7 +15,6 @@ export default function ClientsTable() {
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
-                console.log(data["clients"])
                 setLoadedClients(data["clients"])
                 setloading(false)
             }

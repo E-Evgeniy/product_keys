@@ -94,6 +94,8 @@ i18n
                 product_keys: 'Ключи',
                 day_end_key: 'Дней до дезактивации ключа',
                 key_status: 'Статус ключа',
+                no_active: 'Не активен',
+                active: 'Активен'
                 
 
               }

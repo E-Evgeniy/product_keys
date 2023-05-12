@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 export default function ClientKeysTable(props) {
     const [loading, setloading] = useState(false)
     const [nameClient, setNameClient] = useState('')
+    const [clientKeys, setClientKeys] = useState([])
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -27,12 +28,23 @@ export default function ClientKeysTable(props) {
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
-                setLoadedClients(data["clients"])
+                
+                setClientKeys(data["product_keys"])
+                console.log(data["product_keys"])
                 setloading(false)
             }
             );
     }, [loading])
+
+    let status = t('description.no_active')
+
+    let statusKey = (statusProductKey) => {
+        if (statusProductKey == true ) {
+            t('description.active')
+        }
+    }
+
+    durationDescription(clientKey.duration)
 
 
     const dataSection = (
@@ -68,6 +80,10 @@ export default function ClientKeysTable(props) {
                                     </th>
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        {t('description.key_status')}
+                                    </th>
+                                    <th
+                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.comment')}
                                     </th>
                                     <th
@@ -84,6 +100,71 @@ export default function ClientKeysTable(props) {
                                     </th>
                                 </tr>
                             </thead>
+                            <tbody>
+                                {clientKeys.map((clientKey, index) => {
+                                    return (
+                                        <tr key={clientKey.id}>
+
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <div className="text-gray-900 whitespace-no-wrap">
+                                                    <Link to={String(clientKey.id)}>{clientKey.name}</Link>
+                                                </div>
+                                            </td>                                                                                        
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <div className="text-gray-900 whitespace-no-wrap">
+                                                    {durationDescription(clientKey.duration)}
+                                                    {duration}
+                                                </div>
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <div className="text-gray-900 whitespace-no-wrap">
+                                                    {statusKey(clientKey.status)}
+                                                    {status}
+                                                </div>
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <p className="text-gray-900 whitespace-no-wrap">{clientKey.comment}</p>
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <div className="text-gray-900 whitespace-no-wrap">
+                                                {clientKey.type_key}
+                                                </div>
+                                            </td>
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <div className="text-gray-900 whitespace-no-wrap">
+                                                    {clientKey.created_at}
+                                                </div>
+                                            </td>
+
+                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                                <div className="text-gray-900 whitespace-no-wrap">
+
+                                                    <div className="flex items-stretch ...">
+
+                                                        <button
+                                                            
+                                                            className='relative inline-flex text-sx sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
+        text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#4040F2] mx-1 px-4 py-1 xs:py-1.5 xs:px-5'
+
+                                                        >
+                                                            {t('description.edit')}
+                                                        </button>
+
+
+                                                        <button
+                                                            className='relative inline-flex text-xs sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
+        text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
+                                                            
+                                                        >
+                                                            {t('description.delete')}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    )
+                                })}
+                            </tbody>
                            
                         </table>
                     </div>

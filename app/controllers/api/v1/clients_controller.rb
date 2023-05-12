@@ -82,13 +82,30 @@ module Api
 
       def client_keys
         client = Client.find(params[:client_id])
+        puts("params = #{params}")
         if params[:showKeys] == "all"
-          product_keys = client.product_keys
+          product_keys = client_all_keys(client.product_keys)
+          puts("product_keys = #{product_keys}")
         end
         render(json: { product_keys: })
       end
 
       private
+
+      def client_all_keys(keys)
+        keys = keys.map do |key|
+          {
+            id: key.id,
+            name: key.name,
+            comment: key.comment,
+            duration: OperationsWithKey.working_days(key),
+            type_key: key.types_of_key.name,
+            status: key.status,
+            created_at: key.created_at.strftime("%d.%m.%Y")
+          }
+        end
+        keys
+      end
 
       def validates_client(inputName, inputEmail)
         client = {}
