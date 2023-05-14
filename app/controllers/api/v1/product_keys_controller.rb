@@ -6,6 +6,7 @@ module Api
     # ProductKeysController
     class ProductKeysController < BaseController
       def create
+        puts("PARAMS = #{params}")
         for i in (1..params["productKey"]["volumeKeys"].to_i) do
           product_key = forming_product_key(ProductKey.new, params["productKey"])
 
@@ -17,7 +18,14 @@ module Api
         end        
       end
 
-      def show
+      def destroy
+        product_key = ProductKey.find(params[:id])
+
+        if product_key.destroy
+          render(json: {}, status: :deleted)
+        else
+          render json: { error: product_key.errors.messages }, status: 422
+        end
       end
 
       def checkfields

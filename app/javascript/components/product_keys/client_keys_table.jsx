@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 export default function ClientKeysTable(props) {
-    const [loading, setloading] = useState(false)
+    const [loading, setloading] = useState(true)
     const [nameClient, setNameClient] = useState('')
     const [clientKeys, setClientKeys] = useState([])
     const { t } = useTranslation();
@@ -27,25 +27,58 @@ export default function ClientKeysTable(props) {
 
         fetch(apiEndpoint)
             .then(response => response.json())
-            .then(data => {
-                
+            .then(data => {                
                 setClientKeys(data["product_keys"])
-                console.log(data["product_keys"])
                 setloading(false)
             }
             );
     }, [loading])
 
+    const deleteClientKey = async (id) => {
+        await fetch(`/api/v1/product_keys/${id}`, {
+            method: 'DELETE',
+        }).then((response) => {
+            if (response.status === 200) {
+                setPosts(
+                    product_keys.filter((product_key) => {
+                        return product_key.id !== id;
+                    })
+                );
+            } else {
+                return;
+            }
+        });
+        setloading(true)
+    };
+
     let status = t('description.no_active')
+    let clasStatusKey = "h-5 w-5 px-3 py-5 border-b border-gray-200 bg-white text-sm text-center"
 
     let statusKey = (statusProductKey) => {
+
         if (statusProductKey == true ) {
-            t('description.active')
+            status = t('description.active')
+            clasStatusKey = "h-5 w-5 px-3 py-5 border-b border-gray-200 bg-green-400 text-sm text-center"
+        } else {
+            clasStatusKey = "h-5 w-5 px-3 py-5 border-b border-gray-200 bg-red-400 text-sm text-center"
         }
     }
+    let duration = ""
+    let durationDescription = (clientKey) => {
+        if (clientKey == 0) {
+            duration = 0
+        }
 
-    durationDescription(clientKey.duration)
+        if (clientKey > 0) {
+            duration = clientKey
+        }
 
+        if (clientKey == -1) {
+            duration = t('description.infiniteKey')
+        }
+    } 
+    
+    const loadingSection = (<div>{t('description.loading')}</div>)
 
     const dataSection = (
 
@@ -65,37 +98,39 @@ export default function ClientKeysTable(props) {
                 </div>
             </div>
             <div>
-                <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+                <div className="">
                     <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-                        <table className="min-w-full leading-normal">
+                        <table className="min-w-full leading-normal table-fixed">
                             <thead>
                                 <tr>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="px-6 py-3 border-b-2 h-5 w-150 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.name')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        {t('description.day_end_key')}
-                                    </th>
-                                    <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider"   >
                                         {t('description.key_status')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="h-5 w-5 px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        {t('description.day_end_key')}
+                                    </th>
+
+                                    
+                                    <th
+                                        className="h-5 w-20 px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.comment')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="h-5 w-5 px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.type_of_key')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="h-5 w-5 px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.date_created')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="h-5 w-5 px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.actions')}
                                     </th>
                                 </tr>
@@ -105,38 +140,41 @@ export default function ClientKeysTable(props) {
                                     return (
                                         <tr key={clientKey.id}>
 
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="h-5 w-5 px-5 py-150 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
                                                     <Link to={String(clientKey.id)}>{clientKey.name}</Link>
+                                                    
                                                 </div>
-                                            </td>                                                                                        
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            </td>  
+                                            {statusKey(clientKey.status)}
+                                            <td className={clasStatusKey}>
+                                                <div className="text-gray-900 whitespace-no-wrap">                                                    
+                                                    {status}
+                                                </div>
+                                            </td> 
+                                            <td className="h-5 w-5 px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
                                                     {durationDescription(clientKey.duration)}
                                                     {duration}
                                                 </div>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                                <div className="text-gray-900 whitespace-no-wrap">
-                                                    {statusKey(clientKey.status)}
-                                                    {status}
-                                                </div>
-                                            </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            </td>                                                                                      
+                                            
+                                            
+                                            <td className=" h-5 w-5 px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <p className="text-gray-900 whitespace-no-wrap">{clientKey.comment}</p>
                                             </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="h-5 w-5 px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
                                                 {clientKey.type_key}
                                                 </div>
                                             </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="h-5 w-5 px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
                                                     {clientKey.created_at}
                                                 </div>
                                             </td>
 
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="h-5 w-5 px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
 
                                                     <div className="flex items-stretch ...">
@@ -144,7 +182,7 @@ export default function ClientKeysTable(props) {
                                                         <button
                                                             
                                                             className='relative inline-flex text-sx sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-        text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#4040F2] mx-1 px-4 py-1 xs:py-1.5 xs:px-5'
+                                                             text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#4040F2] mx-1 px-4 py-1 xs:py-1.5 xs:px-5'
 
                                                         >
                                                             {t('description.edit')}
@@ -153,7 +191,8 @@ export default function ClientKeysTable(props) {
 
                                                         <button
                                                             className='relative inline-flex text-xs sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-        text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
+                                                            text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
+                                                            onClick={() => deleteClientKey(clientKey.id)}
                                                             
                                                         >
                                                             {t('description.delete')}

@@ -94,6 +94,7 @@ module Api
 
       def client_all_keys(keys)
         keys = keys.map do |key|
+          puts("key.duration #{key.duration}")
           {
             id: key.id,
             name: key.name,

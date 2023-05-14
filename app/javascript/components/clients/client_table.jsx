@@ -11,7 +11,7 @@ const ClientTable = () => {
 
 
     useEffect(() => {
-        //Hit the server and get the places
+        //
 
         const apiEndpoint = "/api/v1/clients/" + location
 
