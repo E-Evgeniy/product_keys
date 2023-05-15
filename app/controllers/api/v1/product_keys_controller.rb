@@ -7,25 +7,23 @@ module Api
     class ProductKeysController < BaseController
       def create
         puts("PARAMS = #{params}")
-        for i in (1..params["productKey"]["volumeKeys"].to_i) do
+        for i in (0..params["productKey"]["volumeKeys"].to_i - 1) do
           product_key = forming_product_key(ProductKey.new, params["productKey"])
 
           if product_key.save
             render(json: {}, status: :created)
           else
             render json: { error: product_key.errors.messages }, status: 422
-          end          
-        end        
+          end
+        end
       end
 
       def destroy
         product_key = ProductKey.find(params[:id])
 
         if product_key.destroy
-          puts('YYYYYYYYYYY')
-          render(json: {}, status: :ok)          
+          render(json: {}, status: :ok)
         else
-          puts("product_key.errors.messages #{product_key.errors.messages}")
           render json: { error: product_key.errors.messages }, status: 422
         end
       end
@@ -35,6 +33,13 @@ module Api
         rec_duration_keys = check_volume(params[:inputDurationKeys].to_f)
 
         render(json: { rec_volume_keys:, rec_duration_keys: })
+      end
+
+      def show
+        product_key = ProductKey.find(params[:id])
+        duration = OperationsWithKey.working_days(product_key)
+
+        render(json: { product_key:, duration: })
       end
 
       private
@@ -50,7 +55,6 @@ module Api
         product_key
       end
 
-
       def check_volume(num)
         if num.positive? && (num - num.to_i).zero?
           true
@@ -58,7 +62,6 @@ module Api
           false
         end
       end
-
     end
   end
 end

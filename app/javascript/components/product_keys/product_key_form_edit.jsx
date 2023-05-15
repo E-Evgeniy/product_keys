@@ -9,9 +9,12 @@ const ProductKeyForm = (props) => {
     const [value, setValue] = useState('');
     const [inputDuration, setInputDuration] = useState(1)
     const [inputTypeKey, setInputTypeKey] = useState('')
+    const [nameProductKey, setNameProductKey] = useState('')
+    const [durationProductKey, setDurationProductKey] = useState(0)
     
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
     const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
+   
     useEffect(() => {
         //Load types_of_keys
         const apiEndpoint = "/api/v1/type_of_key/names_types_keys"
@@ -22,10 +25,9 @@ const ProductKeyForm = (props) => {
                 setLoadedTypesOfKeys(data["names_types_of_keys"])
                 setLoadedIdTypesOfKeys(data["id_types_of_keys"])
                 setInputTypeKey(data["id_types_of_keys"][0])
-                setloading(false)
             }
             );
-    }, [loading])
+    }, [])
     const options = loadedTypesOfKeys.map((typeKey, index) => {
         return <option key={index}>{typeKey}</option>;
     });
@@ -40,7 +42,6 @@ const ProductKeyForm = (props) => {
             .then(response => response.json())
             .then(data => {
                 setDurationFromTable(data["rec_duration_keys"])
-                setloading(false)
             }
             );
     }, [searchFilelds])
@@ -69,7 +70,6 @@ const ProductKeyForm = (props) => {
             })
             .then((data) => console.log(data.message))
             .catch((error) => console.error(error));
-        setloading(true)
         window.location.replace(`/clients/${props.client_id}`);
     };
 
@@ -107,16 +107,58 @@ const ProductKeyForm = (props) => {
         console.log(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)])
     }
 
+    useEffect(() => {
+        //Check input parametrs
+
+        const apiEndpoint = `/api/v1/product_keys/${props.product_key_id}`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setNameProductKey(data["product_key"].name)
+                setDurationProductKey(data["duration"])
+                console.log(data["duration"])
+                setloading(false)
+            }
+            );
+    }, [])
+
+    const loadingSection = (<div>{t('description.loading')}</div>)
+
     const dataSection = (
 
         <div className="flex items-center justify-center p-12">
             
             <div className="mx-auto w-full max-w-[550px]">
 
-            <h2 className="text-gray-600 font-semibold">{t('description.client')}</h2>
+            <h2 className="text-gray-600 font-semibold text-xl mb-17">{`${t('description.product_key_edit')} ${nameProductKey}`}</h2>
+            
+            <br></br>
+            {console.log(loading)}
 
                 <div className="-mx-3 flex flex-wrap">
-                    <div className="mb-5 w-full px-3 sm:w-2/3">
+                    <div className="mb-3 w-full px-3 sm:w-2/3">
+                        <label
+                            htmlFor="fVolumeDays"
+                            className="mb-3 block text-base font-medium text-[#07074D]"
+                        >
+                            {t('description.volume_days')}
+                        </label>
+                        <input
+                            type="text"
+                            name="fVolumeDays"
+                            id="fVolumeDays"
+                            placeholder={t('description.client_name')}
+                            min="1"
+                            defaultValue={durationProductKey}
+                            className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                        />
+                        <div className={classDurationError}>{t('description.error1_duration_keys')}</div>
+                    </div>
+                </div>
+
+                <div className="-mx-3 flex flex-wrap">
+                    <div className="mb-3 w-full px-3 sm:w-2/3">
                         <label
                             htmlFor="fVolumeDays"
                             className="mb-3 block text-base font-medium text-[#07074D]"
@@ -128,8 +170,7 @@ const ProductKeyForm = (props) => {
                             name="fVolumeDays"
                             id="fVolumeDays"
                             placeholder={t('description.volume_days')}
-                            min="1"
-                            defaultValue={1}
+                            defaultValue={durationProductKey}
                             onChange={onChangeInputDuration}
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
@@ -147,8 +188,6 @@ const ProductKeyForm = (props) => {
                             className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded mr-2" />
 
                         {t('description.infinite_key')}
-
-
                     </div>
 
 
@@ -197,7 +236,11 @@ const ProductKeyForm = (props) => {
         </div>
     )
 
-    return dataSection
+    if (loading) {
+        return loadingSection
+    } else {
+        return dataSection
+    }
 
 }
 

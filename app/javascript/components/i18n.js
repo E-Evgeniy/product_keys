@@ -97,6 +97,8 @@ i18n
                 no_active: 'Не активен',
                 active: 'Активен',
                 infiniteKey: 'Бесконечный срок действия',
+                product_key_edit: 'Редактирование ключа',
+                client_name: 'Имя клиента'
                 
 
               }
