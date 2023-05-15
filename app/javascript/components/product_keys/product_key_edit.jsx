@@ -1,11 +1,17 @@
 import React from "react";
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
-import ClientFormEdit from "./client_form_edit"
+import ProductKeyFormEdit from "./product_key_form_edit"
 const ClientEdit = () => {
 
     const { t } = useTranslation();
+
+    let client_id = useLocation().pathname.split('clients/')[1];
+    client_id = client_id.split('/product_keys')[0];
+
+    let product_key_id = useLocation().pathname.split('product_keys/')[1];
+    product_key_id = product_key_id.split('/edit')[0];
 
     const menuLeftTextClass = () => {
         return (
@@ -30,7 +36,7 @@ const ClientEdit = () => {
                         </div>
 
                         <div className="h-70 col-span-6 rounded-md h-100">
-                        <ClientFormEdit />
+                        < ProductKeyFormEdit product_key_id={product_key_id} client_id ={client_id}/>
                         </div>
                     </div>
                 </section>

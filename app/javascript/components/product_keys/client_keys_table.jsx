@@ -71,6 +71,10 @@ export default function ClientKeysTable(props) {
             duration = t('description.infiniteKey')
         }
     } 
+
+    const editClientKey = async (id) => {
+        window.location.assign(`product_keys/${id}/edit`)        
+    };
     
     const loadingSection = (<div>{t('description.loading')}</div>)
 
@@ -174,7 +178,7 @@ export default function ClientKeysTable(props) {
                                                     <div className="flex items-stretch ...">
 
                                                         <button
-                                                            
+                                                            onClick={() => editClientKey(clientKey.id)}                                                            
                                                             className='relative inline-flex text-sx sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
                                                              text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#4040F2] mx-1 px-4 py-1 xs:py-1.5 xs:px-5'
 
