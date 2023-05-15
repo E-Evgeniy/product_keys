@@ -22,8 +22,10 @@ module Api
         product_key = ProductKey.find(params[:id])
 
         if product_key.destroy
-          render(json: {}, status: :deleted)
+          puts('YYYYYYYYYYY')
+          render(json: {}, status: :ok)          
         else
+          puts("product_key.errors.messages #{product_key.errors.messages}")
           render json: { error: product_key.errors.messages }, status: 422
         end
       end
