@@ -38,8 +38,15 @@ module Api
       def show
         product_key = ProductKey.find(params[:id])
         duration = OperationsWithKey.working_days(product_key)
+        client = product_key.client
 
-        render(json: { product_key:, duration: })
+        client_name = if client.nil?
+                        ''
+                      else
+                        client.name
+                      end
+
+        render(json: { product_key:, duration:, client_name: })
       end
 
       private

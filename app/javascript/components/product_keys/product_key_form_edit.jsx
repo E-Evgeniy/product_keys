@@ -11,6 +11,7 @@ const ProductKeyForm = (props) => {
     const [inputTypeKey, setInputTypeKey] = useState('')
     const [nameProductKey, setNameProductKey] = useState('')
     const [durationProductKey, setDurationProductKey] = useState(0)
+    const [clientName, setClientName] = useState('')
     
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
     const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
@@ -97,14 +98,13 @@ const ProductKeyForm = (props) => {
 
     let classDurationError = "text-red-600"
 
-    if (durationFromTable) {
+    if (durationFromTable || inputInfiniteKey == true) {
         classDurationError = "invisible"
     }
 
     let changeTypeKey = (e) => {
         setValue(e.target.value)
         setInputTypeKey(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)]);
-        console.log(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)])
     }
 
     useEffect(() => {
@@ -117,7 +117,9 @@ const ProductKeyForm = (props) => {
             .then(data => {
                 setNameProductKey(data["product_key"].name)
                 setDurationProductKey(data["duration"])
-                console.log(data["duration"])
+                setClientName(data["client_name"])
+                setInputInfiniteKey(data["product_key"].infinite_period)
+
                 setloading(false)
             }
             );
@@ -131,29 +133,26 @@ const ProductKeyForm = (props) => {
             
             <div className="mx-auto w-full max-w-[550px]">
 
-            <h2 className="text-gray-600 font-semibold text-xl mb-17">{`${t('description.product_key_edit')} ${nameProductKey}`}</h2>
+            <h2 className="text-gray-600 font-semibold text-xl mb-19">{`${t('description.product_key_edit')} ${nameProductKey}`}</h2>
             
             <br></br>
-            {console.log(loading)}
 
                 <div className="-mx-3 flex flex-wrap">
-                    <div className="mb-3 w-full px-3 sm:w-2/3">
+                    <div className="mb-5 w-full px-3 sm:w-2/3">
                         <label
-                            htmlFor="fVolumeDays"
+                            htmlFor="fClientName"
                             className="mb-3 block text-base font-medium text-[#07074D]"
                         >
-                            {t('description.volume_days')}
+                            {t('description.client_name')}
                         </label>
                         <input
                             type="text"
-                            name="fVolumeDays"
+                            name="fClientName"
                             id="fVolumeDays"
                             placeholder={t('description.client_name')}
-                            min="1"
-                            defaultValue={durationProductKey}
+                            defaultValue={clientName}
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
-                        <div className={classDurationError}>{t('description.error1_duration_keys')}</div>
                     </div>
                 </div>
 
