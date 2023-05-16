@@ -65,7 +65,7 @@ const ClientFormEdit = () => {
 
     let filedComment = (inputComment, countEditComment, editComment) => {
       let rezult = inputComment
-      if (countEditEmail == 0) {
+      if (countEditComment == 0) {
         rezult = editComment
       } 
       return rezult

@@ -6,7 +6,7 @@ const ProductKeyForm = (props) => {
     const { t } = useTranslation();
     const [searchFilelds, setSearchFilelds] = useState('')
     const [searchFileldClient, setSearchFileldClient] = useState('')
-    const [inputInfiniteKey, setInputInfiniteKey] = useState(false);  
+    const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
     const [value, setValue] = useState('');
     const [inputDuration, setInputDuration] = useState(0)
     const [inputTypeKey, setInputTypeKey] = useState('')
@@ -17,11 +17,13 @@ const ProductKeyForm = (props) => {
     const [clientName, setClientName] = useState('')
     const [clientId, setClientId] = useState('')
     const [countChangeName, setCountChangeName] = useState(0)
-    const [checkName, setCheckName] = useState('')
-    
+    const [inputComment, setInputComment] = useState('')
+
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
     const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
-   
+
+    const [countEditComment, setCountEditComment] = useState(0)
+
     useEffect(() => {
         //Load types_of_keys
         const apiEndpoint = `/api/v1/type_of_key/names_types_keys?product_key_id=${props.product_key_id}`
@@ -51,7 +53,7 @@ const ProductKeyForm = (props) => {
             }
             );
     }, [searchFilelds])
-    
+
     useEffect(() => {
         //Check input client name
         const apiEndpoint = `/api/v1/client/check_name_for_edit_key?nameClient=${inputClient}&countChangeName=${countChangeName}&client_id=${props.client_id}`
@@ -76,8 +78,8 @@ const ProductKeyForm = (props) => {
                     duration: inputDuration,
                     infinite_period: inputInfiniteKey,
                     types_of_key_id: inputTypeKey,
-                    comment: inputComment,
-                    client_id: clientId
+                    comment: filedComment(inputComment, countEditComment, editComment),
+                    client_id: fieldClient(props.client_id, countChangeName, clientId),
                 },
             }),
         })
@@ -90,6 +92,22 @@ const ProductKeyForm = (props) => {
             .catch((error) => console.error(error));
         window.location.replace(`/clients/${props.client_id}`);
     };
+
+    let filedComment = (inputComment, countEditComment, editComment) => {
+        let rezult = inputComment
+        if (countEditComment == 0) {
+          rezult = editComment
+        } 
+        return rezult
+      }
+
+      let filedName = (inputName, countEditName, editName) => {
+        let rezult = inputComment
+        if (countEditName == 0) {
+          rezult = editName
+        } 
+        return rezult
+      }
 
     const onChangeInputDuration = (e) => {
         setInputDuration(e.target.value);
@@ -109,6 +127,7 @@ const ProductKeyForm = (props) => {
 
     const onSearchTextChangeInputComment = (e) => {
         setInputComment(e.target.value);
+        setCountEditComment(countEditComment+1)
     }
 
     let classNameButton = "hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none disabled:opacity-75"
@@ -160,12 +179,12 @@ const ProductKeyForm = (props) => {
     const dataSection = (
 
         <div className="flex items-center justify-center p-12">
-            
+
             <div className="mx-auto w-full max-w-[550px]">
 
-            <h2 className="text-gray-600 font-semibold text-xl mb-19">{`${t('description.product_key_edit')} ${nameProductKey}`}</h2>
-            
-            <br></br>
+                <h2 className="text-gray-600 font-semibold text-xl mb-19">{`${t('description.product_key_edit')} ${nameProductKey}`}</h2>
+
+                <br></br>
 
                 <div className="-mx-3 flex flex-wrap">
                     <div className="mb-5 w-full px-3 sm:w-2/3">
@@ -227,9 +246,9 @@ const ProductKeyForm = (props) => {
                         <p>{t('description.select_type_key')}</p>
                         <br></br>
                         <select className="p-1 px-2 outline-none w-2/3 bg-white"
-                                value={value}
-                                onChange={changeTypeKey}
-                                >
+                            value={value}
+                            onChange={changeTypeKey}
+                        >
                             {options}
                         </select>
 
