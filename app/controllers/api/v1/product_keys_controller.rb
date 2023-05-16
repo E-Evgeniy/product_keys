@@ -30,7 +30,7 @@ module Api
 
       def checkfields
         rec_volume_keys = check_volume(params[:inputVolumeKeys].to_f)
-        rec_duration_keys = check_volume(params[:inputDurationKeys].to_f)
+        rec_duration_keys = check_volume(params[:inputDurationKeys].to_f, params[:changeCheckbox])
 
         render(json: { rec_volume_keys:, rec_duration_keys: })
       end
@@ -49,6 +49,10 @@ module Api
         render(json: { product_key:, duration:, client_name: })
       end
 
+      def update
+        
+      end
+
       private
 
       def forming_product_key(product_key, data_key)
@@ -62,8 +66,9 @@ module Api
         product_key
       end
 
-      def check_volume(num)
-        if num.positive? && (num - num.to_i).zero?
+      def check_volume(num, infinityKey = false)
+        puts("NUM = #{num} infinityKey =#{infinityKey}")
+        if (num.positive? && (num - num.to_i).zero?) || (infinityKey == true)
           true
         else
           false

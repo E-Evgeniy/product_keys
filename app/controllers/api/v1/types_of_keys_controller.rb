@@ -71,10 +71,39 @@ module Api
           id_types_of_keys << types_of_key.id
         end
 
+        if !params[:product_key_id].nil? && !names_types_of_keys.empty?
+          data_form = forming_names_tpk(names_types_of_keys, params[:product_key_id])
+          names_types_of_keys = data_form["names"] 
+          id_types_of_keys = forming_id_tpk(data_form["index"], id_types_of_keys) if !data_form["index"].nil?
+        end
+
         render(json: { names_types_of_keys:, id_types_of_keys: })
       end
 
       private
+
+      def forming_names_tpk(names_types_of_keys, pk_id)
+        pk = ProductKey.find(pk_id)
+        array_and_index = {}
+
+        if names_types_of_keys[0] != pk.types_of_key.name
+          bufer = names_types_of_keys[0]
+          index_pk = names_types_of_keys.index(pk.types_of_key.name)
+          names_types_of_keys[0] = names_types_of_keys[index_pk]
+          names_types_of_keys[index_pk] = bufer
+          array_and_index["index"] = index_pk
+        end
+        array_and_index["names"] = names_types_of_keys
+
+        array_and_index
+      end
+
+      def forming_id_tpk(name_index, id_types_of_keys)
+        bufer = id_types_of_keys[0]
+        index_pk = id_types_of_keys.index(name_index)
+        id_types_of_keys[0] = id_types_of_keys[index_pk]
+        id_types_of_keys[index_pk] = bufer
+      end
 
       def validates_type_of_key(inputName, inputComment)
         type_of_key = {}

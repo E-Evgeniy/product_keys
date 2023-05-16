@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   get "/api/v1/client/find", to: "api/v1/clients#find"
   get "api/v1/client/find_for_edit", to: "api/v1/clients#find_for_edit"
   get "/api/v1/client/product_keys", to: "api/v1/clients#client_keys"
+  get "/api/v1/client/check_name_for_edit_key", to: "api/v1/clients#check_name_for_edit_key"
 
   namespace :api do
     namespace :v1 do

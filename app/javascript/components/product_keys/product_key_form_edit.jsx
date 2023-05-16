@@ -5,20 +5,26 @@ const ProductKeyForm = (props) => {
     const [loading, setloading] = useState(true)
     const { t } = useTranslation();
     const [searchFilelds, setSearchFilelds] = useState('')
+    const [searchFileldClient, setSearchFileldClient] = useState('')
     const [inputInfiniteKey, setInputInfiniteKey] = useState(false);  
     const [value, setValue] = useState('');
-    const [inputDuration, setInputDuration] = useState(1)
+    const [inputDuration, setInputDuration] = useState(0)
     const [inputTypeKey, setInputTypeKey] = useState('')
+    const [inputClient, setInputClient] = useState('')
     const [nameProductKey, setNameProductKey] = useState('')
     const [durationProductKey, setDurationProductKey] = useState(0)
+    const [commentProductKey, setCommentProductKey] = useState('')
     const [clientName, setClientName] = useState('')
+    const [clientId, setClientId] = useState('')
+    const [countChangeName, setCountChangeName] = useState(0)
+    const [checkName, setCheckName] = useState('')
     
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
     const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
    
     useEffect(() => {
         //Load types_of_keys
-        const apiEndpoint = "/api/v1/type_of_key/names_types_keys"
+        const apiEndpoint = `/api/v1/type_of_key/names_types_keys?product_key_id=${props.product_key_id}`
 
         fetch(apiEndpoint)
             .then(response => response.json())
@@ -36,8 +42,7 @@ const ProductKeyForm = (props) => {
     const [durationFromTable, setDurationFromTable] = useState(true)
     useEffect(() => {
         //Check input parametrs
-
-        const apiEndpoint = `/api/v1/product_key/check_fields?inputVolumeKeys=${1}&inputDurationKeys=${inputDuration}`
+        const apiEndpoint = `/api/v1/product_key/check_fields?inputVolumeKeys=${1}&inputDurationKeys=${inputDuration}&changeCheckbox=${inputInfiniteKey}`
 
         fetch(apiEndpoint)
             .then(response => response.json())
@@ -46,6 +51,18 @@ const ProductKeyForm = (props) => {
             }
             );
     }, [searchFilelds])
+    
+    useEffect(() => {
+        //Check input client name
+        const apiEndpoint = `/api/v1/client/check_name_for_edit_key?nameClient=${inputClient}&countChangeName=${countChangeName}&client_id=${props.client_id}`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setClientId(data["client"])
+            }
+            );
+    }, [searchFileldClient])
 
     // Key edit
     const ProductKeyEdit = () => {
@@ -60,7 +77,7 @@ const ProductKeyForm = (props) => {
                     infinite_period: inputInfiniteKey,
                     types_of_key_id: inputTypeKey,
                     comment: inputComment,
-                    client_id: props.client_id
+                    client_id: clientId
                 },
             }),
         })
@@ -79,8 +96,15 @@ const ProductKeyForm = (props) => {
         setSearchFilelds(e.target.value);
     }
 
+    const onChangeInputClient = (e) => {
+        setInputClient(e.target.value);
+        setSearchFileldClient(e.target.value);
+        setCountChangeName(countChangeName + 1)
+    }
+
     function changeCheckbox() {
         setInputInfiniteKey(!inputInfiniteKey);
+        setSearchFilelds(Math.random());
     }
 
     const onSearchTextChangeInputComment = (e) => {
@@ -90,16 +114,20 @@ const ProductKeyForm = (props) => {
     let classNameButton = "hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none disabled:opacity-75"
 
     let disableButton = false
-    if (durationFromTable == false) {
+    if ((durationFromTable == false && inputInfiniteKey == false) || (clientId == false)) {
         disableButton = true
     }
-
-    let classVolumeError = "text-red-600"
 
     let classDurationError = "text-red-600"
 
     if (durationFromTable || inputInfiniteKey == true) {
         classDurationError = "invisible"
+    }
+
+    let classNameError = "text-red-600"
+
+    if (clientId != false) {
+        classNameError = "invisible"
     }
 
     let changeTypeKey = (e) => {
@@ -117,8 +145,10 @@ const ProductKeyForm = (props) => {
             .then(data => {
                 setNameProductKey(data["product_key"].name)
                 setDurationProductKey(data["duration"])
+                setInputDuration(data["duration"])
                 setClientName(data["client_name"])
                 setInputInfiniteKey(data["product_key"].infinite_period)
+                setCommentProductKey(data["product_key"].comment)
 
                 setloading(false)
             }
@@ -151,8 +181,10 @@ const ProductKeyForm = (props) => {
                             id="fVolumeDays"
                             placeholder={t('description.client_name')}
                             defaultValue={clientName}
+                            onChange={onChangeInputClient}
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
+                        <div className={classNameError}>{t('description.error2_name_keys')}</div>
                     </div>
                 </div>
 
@@ -194,7 +226,10 @@ const ProductKeyForm = (props) => {
                     <div className="mb-5 block text-base font-medium text-[#07074D]">
                         <p>{t('description.select_type_key')}</p>
                         <br></br>
-                        <select className="p-1 px-2 outline-none w-2/3 bg-white" value={value} onChange={changeTypeKey}>
+                        <select className="p-1 px-2 outline-none w-2/3 bg-white"
+                                value={value}
+                                onChange={changeTypeKey}
+                                >
                             {options}
                         </select>
 
@@ -214,6 +249,7 @@ const ProductKeyForm = (props) => {
                             id="comment"
                             placeholder={t('description.input_comment')}
                             min="0"
+                            defaultValue={commentProductKey}
                             onChange={onSearchTextChangeInputComment}
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />

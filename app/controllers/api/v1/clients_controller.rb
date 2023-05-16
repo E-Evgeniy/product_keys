@@ -82,7 +82,7 @@ module Api
 
       def client_keys
         client = Client.find(params[:client_id])
-        puts("params = #{params}")
+        
         if params[:showKeys] == "all"
           product_keys = client_all_keys(client.product_keys)
           puts("product_keys = #{product_keys}")
@@ -90,11 +90,30 @@ module Api
         render(json: { product_keys: })
       end
 
+      def check_name_for_edit_key
+        client = find_client(params[:countChangeName], params[:client_id], params[:nameClient])
+
+        if !client.nil?
+          client = true
+        else
+          client = false
+        end
+
+        render(json: { client: })
+      end
+
       private
+
+      def find_client(count, client_id, client_name)
+        if count.to_i.zero?
+          Client.find(client_id)
+        else
+          Client.where(name: client_name).first
+        end
+      end
 
       def client_all_keys(keys)
         keys = keys.map do |key|
-          puts("key.duration #{key.duration}")
           {
             id: key.id,
             name: key.name,

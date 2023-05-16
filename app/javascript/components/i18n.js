@@ -98,7 +98,8 @@ i18n
                 active: 'Активен',
                 infiniteKey: 'Бесконечный срок действия',
                 product_key_edit: 'Редактирование ключа',
-                client_name: 'Имя клиента'
+                client_name: 'Имя клиента',
+                error2_name_keys: 'Такого клиента не существует'
                 
 
               }
