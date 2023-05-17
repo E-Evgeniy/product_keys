@@ -91,21 +91,40 @@ module Api
       end
 
       def check_name_for_edit_key
-        client = find_client(params[:countChangeName], params[:client_id], params[:nameClient])
+         client_data = {}
 
-        if !client.nil?
-          client = true
+         puts("*** check_name_for_edit_key PARAMS *** ")
+        puts(params)
+        puts("------------------")
+
+        if params[:clientNameEdit].nil?
+          client_data['client_allowed'] = true
+          client_data['client_id'] = ''
         else
-          client = false
+          client_data = forming_client_data(client_data, params[:changeName], params[:client_id], params[:clientNameEdit])
         end
 
-        render(json: { client: })
+        render(json: { client_data: })
       end
 
       private
 
-      def find_client(count, client_id, client_name)
-        if count.to_i.zero?
+      def forming_client_data(client_data, changeName, client_id, nameClient)
+        client = find_client(changeName, client_id, nameClient)
+
+        if !client.nil?
+          client_data['client_allowed'] = true
+          client_data['client_id'] = client.id
+        else
+          client_data['client_allowed'] = false
+          client_data['client_id'] = ''
+        end
+
+        client_data
+      end
+
+      def find_client(changeName, client_id, client_name)
+        if changeName == 'false'
           Client.find(client_id)
         else
           Client.where(name: client_name).first

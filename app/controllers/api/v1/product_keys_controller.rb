@@ -49,8 +49,24 @@ module Api
         render(json: { product_key:, duration:, client_name: })
       end
 
+      def calculation_need_duration
+        puts(params)
+        product_key = ProductKey.find(params[:id])
+        duration = OperationsWithKey.need_duration(product_key, params[:duration].to_i)
+
+        render(json: { duration: })
+      end
+      
+
       def update
+        puts("*** PARAMS *** ")
+        puts(params)
+        puts("------------------")
         
+        pk = ProductKey.find(params[:id])
+        pk.status = true
+        pk.client_id = params[:productKey][:client_id]
+        pk.duration = params[:productKey][:client_id]
       end
 
       private

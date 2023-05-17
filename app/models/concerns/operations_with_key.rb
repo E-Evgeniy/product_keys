@@ -55,4 +55,10 @@ module OperationsWithKey
       delta_time
     end
   end
+
+  def self.need_duration(pk, duration_need)
+    duration = (Time.current - pk.created_at) + duration_need * (60 * 60 * 24)
+
+    (duration / (60 * 60 * 24)).to_i
+  end
 end

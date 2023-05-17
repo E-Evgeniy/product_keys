@@ -183,5 +183,3 @@ export default function ClientsTable() {
     }
 }
 
-// Add some javascript to replace the div where = 'places-list-container'
-// with com=ntent render above

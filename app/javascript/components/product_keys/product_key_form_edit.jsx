@@ -1,28 +1,53 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 
-const ProductKeyForm = (props) => {
-    const [loading, setloading] = useState(true)
+export default function ProductKeyForm(props) {    
     const { t } = useTranslation();
+
+    const [loading, setloading] = useState(true)
+
     const [searchFilelds, setSearchFilelds] = useState('')
-    const [searchFileldClient, setSearchFileldClient] = useState('')
-    const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
-    const [value, setValue] = useState('');
-    const [inputDuration, setInputDuration] = useState(0)
-    const [inputTypeKey, setInputTypeKey] = useState('')
-    const [inputClient, setInputClient] = useState('')
+    const [searchFileldClientName, setSearchFileldClientName] = useState('')
+
     const [nameProductKey, setNameProductKey] = useState('')
-    const [durationProductKey, setDurationProductKey] = useState(0)
-    const [commentProductKey, setCommentProductKey] = useState('')
-    const [clientName, setClientName] = useState('')
-    const [clientId, setClientId] = useState('')
-    const [countChangeName, setCountChangeName] = useState(0)
-    const [inputComment, setInputComment] = useState('')
+    const [clientAllowed, setClientAllowed] = useState('')
+    
+    const [typeKeyIdEdit, setTypeKeyIdEdit] = useState('')
+
+    const [changeName, setChangeName] = useState(false)
+    const [changeTypeKey, setChangeTypeKey] = useState(false)
 
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
     const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
 
-    const [countEditComment, setCountEditComment] = useState(0)
+    const [typeKey, setTypeKey] = useState('');
+
+    const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
+    const [clientId, setClientId] = useState(props.client_id);
+    const [commentProductKey, setCommentProductKey] = useState('')
+    const [inputDuration, setInputDuration] = useState(0)
+    const [durationPK, setDurationPK] = useState('')
+    const [clientName, setClientName] = useState('')
+
+
+    useEffect(() => {
+        //Load parametrs key
+
+        const apiEndpoint = `/api/v1/product_keys/${props.product_key_id}`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setNameProductKey(data["product_key"].name)
+                setInputDuration(data["duration"])
+                setClientName(data["client_name"])
+                setInputInfiniteKey(data["product_key"].infinite_period)
+                setCommentProductKey(data["product_key"].comment)
+
+                setloading(false)
+            }
+            );
+    }, [])
 
     useEffect(() => {
         //Load types_of_keys
@@ -33,13 +58,41 @@ const ProductKeyForm = (props) => {
             .then(data => {
                 setLoadedTypesOfKeys(data["names_types_of_keys"])
                 setLoadedIdTypesOfKeys(data["id_types_of_keys"])
-                setInputTypeKey(data["id_types_of_keys"][0])
             }
             );
     }, [])
+
     const options = loadedTypesOfKeys.map((typeKey, index) => {
         return <option key={index}>{typeKey}</option>;
     });
+
+    // Key edit
+    const ProductKeyEdit = () => {
+
+        fetch(`/api/v1/product_keys/${props.product_key_id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json", },
+            body: JSON.stringify({
+                productKey: {
+                    volumeKeys: 1,
+                    duration: durationPK,
+                    infinite_period: inputInfiniteKey,
+                    types_of_key_id: fieldTypeKey,
+                    comment: commentProductKey,
+                    client_id: clientId,
+                    status: true
+                },
+            }),
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                }
+            })
+            .then((data) => console.log(data.message))
+            .catch((error) => console.error(error));
+        window.location.replace(`/clients/${props.client_id}`);
+    };
 
     const [durationFromTable, setDurationFromTable] = useState(true)
     useEffect(() => {
@@ -55,8 +108,20 @@ const ProductKeyForm = (props) => {
     }, [searchFilelds])
 
     useEffect(() => {
+        //Check input parametrs
+        const apiEndpoint = `/api/v1/product_key/calculation_need_duration?duration=${inputDuration}&id=${props.product_key_id}`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setDurationPK(data["duration"])
+            }
+            );
+    }, [searchFilelds])
+
+    useEffect(() => {
         //Check input client name
-        const apiEndpoint = `/api/v1/client/check_name_for_edit_key?nameClient=${inputClient}&countChangeName=${countChangeName}&client_id=${props.client_id}`
+        const apiEndpoint = `/api/v1/client/check_name_for_edit_key?nameClient=${clientName}&changeName=${changeName}&client_id=${props.client_id}`
 
         fetch(apiEndpoint)
             .then(response => response.json())
@@ -64,60 +129,22 @@ const ProductKeyForm = (props) => {
                 setClientId(data["client"])
             }
             );
-    }, [searchFileldClient])
+    }, [searchFileldClientName])
 
-    // Key edit
-    const ProductKeyEdit = () => {
-
-        fetch(`/api/v1/product_keys/`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", },
-            body: JSON.stringify({
-                productKey: {
-                    volumeKeys: 1,
-                    duration: inputDuration,
-                    infinite_period: inputInfiniteKey,
-                    types_of_key_id: inputTypeKey,
-                    comment: filedComment(inputComment, countEditComment, editComment),
-                    client_id: fieldClient(props.client_id, countChangeName, clientId),
-                },
-            }),
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json()
-                }
-            })
-            .then((data) => console.log(data.message))
-            .catch((error) => console.error(error));
-        window.location.replace(`/clients/${props.client_id}`);
-    };
-
-    let filedComment = (inputComment, countEditComment, editComment) => {
-        let rezult = inputComment
-        if (countEditComment == 0) {
-          rezult = editComment
-        } 
-        return rezult
-      }
-
-      let filedName = (inputName, countEditName, editName) => {
-        let rezult = inputComment
-        if (countEditName == 0) {
-          rezult = editName
-        } 
-        return rezult
-      }
-
-    const onChangeInputDuration = (e) => {
-        setInputDuration(e.target.value);
-        setSearchFilelds(e.target.value);
+    const onChangeClientName = (e) => {
+        setClientName(e.target.value);
+        setSearchFileldClientName(e.target.value);
+        setChangeName(true)
     }
 
-    const onChangeInputClient = (e) => {
-        setInputClient(e.target.value);
-        setSearchFileldClient(e.target.value);
-        setCountChangeName(countChangeName + 1)
+    const onSearchTextChangeInputComment = (e) => {
+        setCommentProductKey(e.target.value);
+    }
+
+    let onChangeTypeKey = (e) => {
+        setTypeKey(e.target.value);
+        setChangeTypeKey(true);
+        setTypeKeyIdEdit(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)]);
     }
 
     function changeCheckbox() {
@@ -125,9 +152,37 @@ const ProductKeyForm = (props) => {
         setSearchFilelds(Math.random());
     }
 
-    const onSearchTextChangeInputComment = (e) => {
-        setInputComment(e.target.value);
-        setCountEditComment(countEditComment+1)
+    const onChangeInputDuration = (e) => {
+        setInputDuration(e.target.value);
+        setSearchFilelds(e.target.value);
+    }
+
+    useEffect(() => {
+        //Check input client name
+        const apiEndpoint = `/api/v1/client/check_name_for_edit_key?clientNameEdit=${clientName}&changeName=${changeName}&client_id=${props.client_id}`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setClientId(data["client_data"]["client_id"]),
+                setClientAllowed(data["client_data"]["client_allowed"])
+            }
+            );
+    }, [searchFileldClientName])
+    
+      let fieldTypeKey = () => {
+        let rezult = loadedIdTypesOfKeys[0]
+        if (changeTypeKey) {
+          rezult = typeKeyIdEdit
+        } 
+        return rezult
+      }
+      
+
+    let classNameError = "text-red-600"
+
+    if (clientAllowed) {
+        classNameError = "invisible"
     }
 
     let classNameButton = "hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none disabled:opacity-75"
@@ -142,37 +197,6 @@ const ProductKeyForm = (props) => {
     if (durationFromTable || inputInfiniteKey == true) {
         classDurationError = "invisible"
     }
-
-    let classNameError = "text-red-600"
-
-    if (clientId != false) {
-        classNameError = "invisible"
-    }
-
-    let changeTypeKey = (e) => {
-        setValue(e.target.value)
-        setInputTypeKey(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)]);
-    }
-
-    useEffect(() => {
-        //Check input parametrs
-
-        const apiEndpoint = `/api/v1/product_keys/${props.product_key_id}`
-
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                setNameProductKey(data["product_key"].name)
-                setDurationProductKey(data["duration"])
-                setInputDuration(data["duration"])
-                setClientName(data["client_name"])
-                setInputInfiniteKey(data["product_key"].infinite_period)
-                setCommentProductKey(data["product_key"].comment)
-
-                setloading(false)
-            }
-            );
-    }, [])
 
     const loadingSection = (<div>{t('description.loading')}</div>)
 
@@ -200,7 +224,7 @@ const ProductKeyForm = (props) => {
                             id="fVolumeDays"
                             placeholder={t('description.client_name')}
                             defaultValue={clientName}
-                            onChange={onChangeInputClient}
+                            onChange={onChangeClientName}
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
                         <div className={classNameError}>{t('description.error2_name_keys')}</div>
@@ -220,7 +244,7 @@ const ProductKeyForm = (props) => {
                             name="fVolumeDays"
                             id="fVolumeDays"
                             placeholder={t('description.volume_days')}
-                            defaultValue={durationProductKey}
+                            defaultValue={inputDuration}
                             onChange={onChangeInputDuration}
                             className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                         />
@@ -246,8 +270,8 @@ const ProductKeyForm = (props) => {
                         <p>{t('description.select_type_key')}</p>
                         <br></br>
                         <select className="p-1 px-2 outline-none w-2/3 bg-white"
-                            value={value}
-                            onChange={changeTypeKey}
+                            value={typeKey}
+                            onChange={onChangeTypeKey}
                         >
                             {options}
                         </select>
@@ -297,8 +321,3 @@ const ProductKeyForm = (props) => {
     }
 
 }
-
-// Add some javascript to replace the div where = 'places-list-container'
-// with com=ntent render above
-
-export default ProductKeyForm;
