@@ -50,7 +50,6 @@ module Api
       end
 
       def calculation_need_duration
-        puts(params)
         product_key = ProductKey.find(params[:id])
         duration = OperationsWithKey.need_duration(product_key, params[:duration].to_i)
 

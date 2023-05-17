@@ -73,11 +73,21 @@ module Api
 
         if !params[:product_key_id].nil? && !names_types_of_keys.empty?
           data_form = forming_names_tpk(names_types_of_keys, params[:product_key_id])
-          names_types_of_keys = data_form["names"] 
-          id_types_of_keys = forming_id_tpk(data_form["index"], id_types_of_keys) if !data_form["index"].nil?
+          names_types_of_keys = data_form['names']
+          id_types_of_keys = forming_id_tpk(data_form['index'], id_types_of_keys) unless data_form['index'].nil?
         end
 
         render(json: { names_types_of_keys:, id_types_of_keys: })
+      end
+
+      def find_id
+        unless params[:changeTypeKey]
+          type_key_id = TypesOfKey.where(name: params[:nameEditTypeKey])[0].id
+        else          
+          type_key_id = TypesOfKey.where(name: params[:nameTypeKey])[0].id
+        end
+
+        render(json: { type_key_id: })
       end
 
       private

@@ -7,18 +7,18 @@ export default function ProductKeyForm(props) {
     const [loading, setloading] = useState(true)
 
     const [searchFilelds, setSearchFilelds] = useState('')
+    const [searchFileldsDuration, setSearchFileldsDuration] = useState('')
     const [searchFileldClientName, setSearchFileldClientName] = useState('')
+    const [searchFileldTypeKey, setSearchFileldTypeKey] = useState('')
 
     const [nameProductKey, setNameProductKey] = useState('')
     const [clientAllowed, setClientAllowed] = useState('')
-    
-    const [typeKeyIdEdit, setTypeKeyIdEdit] = useState('')
 
     const [changeName, setChangeName] = useState(false)
     const [changeTypeKey, setChangeTypeKey] = useState(false)
+    const [typeKeyId, setTypeKeyId] = useState(false)
 
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
-    const [loadedIdTypesOfKeys, setLoadedIdTypesOfKeys] = useState([])
 
     const [typeKey, setTypeKey] = useState('');
 
@@ -57,7 +57,7 @@ export default function ProductKeyForm(props) {
             .then(response => response.json())
             .then(data => {
                 setLoadedTypesOfKeys(data["names_types_of_keys"])
-                setLoadedIdTypesOfKeys(data["id_types_of_keys"])
+                setTypeKey(data["names_types_of_keys"][0])       
             }
             );
     }, [])
@@ -74,10 +74,9 @@ export default function ProductKeyForm(props) {
             headers: { "Content-Type": "application/json", },
             body: JSON.stringify({
                 productKey: {
-                    volumeKeys: 1,
                     duration: durationPK,
                     infinite_period: inputInfiniteKey,
-                    types_of_key_id: fieldTypeKey,
+                    types_of_key_id: typeKeyId,
                     comment: commentProductKey,
                     client_id: clientId,
                     status: true
@@ -108,6 +107,16 @@ export default function ProductKeyForm(props) {
     }, [searchFilelds])
 
     useEffect(() => {
+        //load TypeKey id
+        const apiEndpoint = `/api/v1/type_key/find_id?nameTypeKey=${typeKey}&changeTypeKey=${changeTypeKey}&nameEditTypeKey=${typeKey}`
+        .then(response => response.json())
+        .then(data => {
+                setTypeKeyId(data["type_key_id"])
+            }
+            );
+    }, [searchFileldTypeKey])
+
+    useEffect(() => {
         //Check input parametrs
         const apiEndpoint = `/api/v1/product_key/calculation_need_duration?duration=${inputDuration}&id=${props.product_key_id}`
 
@@ -117,7 +126,7 @@ export default function ProductKeyForm(props) {
                 setDurationPK(data["duration"])
             }
             );
-    }, [searchFilelds])
+    }, [searchFileldsDuration])
 
     useEffect(() => {
         //Check input client name
@@ -143,8 +152,8 @@ export default function ProductKeyForm(props) {
 
     let onChangeTypeKey = (e) => {
         setTypeKey(e.target.value);
-        setChangeTypeKey(true);
-        setTypeKeyIdEdit(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)]);
+        setChangeTypeKey(true)
+        setSearchFileldTypeKey(e.target.value);    
     }
 
     function changeCheckbox() {
@@ -154,7 +163,7 @@ export default function ProductKeyForm(props) {
 
     const onChangeInputDuration = (e) => {
         setInputDuration(e.target.value);
-        setSearchFilelds(e.target.value);
+        setSearchFileldsDuration(e.target.value);
     }
 
     useEffect(() => {
@@ -169,23 +178,17 @@ export default function ProductKeyForm(props) {
             }
             );
     }, [searchFileldClientName])
-    
-      let fieldTypeKey = () => {
-        let rezult = loadedIdTypesOfKeys[0]
-        if (changeTypeKey) {
-          rezult = typeKeyIdEdit
-        } 
-        return rezult
-      }
       
 
     let classNameError = "text-red-600"
+    let classInputError = "w-full rounded-md border border-[#f44336] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#f44336] focus:shadow-md"
 
     if (clientAllowed) {
         classNameError = "invisible"
+        classInputError = "w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
     }
 
-    let classNameButton = "hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none disabled:opacity-75"
+    let classNameButton = "hover:zshadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none disabled:opacity-75"
 
     let disableButton = false
     if ((durationFromTable == false && inputInfiniteKey == false) || (clientId == false)) {
@@ -193,9 +196,11 @@ export default function ProductKeyForm(props) {
     }
 
     let classDurationError = "text-red-600"
+    let classInputErrorDuration = "w-full rounded-md border border-[#f44336] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#f44336] focus:shadow-md"
 
     if (durationFromTable || inputInfiniteKey == true) {
         classDurationError = "invisible"
+        classInputErrorDuration = "w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
     }
 
     const loadingSection = (<div>{t('description.loading')}</div>)
@@ -225,7 +230,7 @@ export default function ProductKeyForm(props) {
                             placeholder={t('description.client_name')}
                             defaultValue={clientName}
                             onChange={onChangeClientName}
-                            className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                            className={classInputError}
                         />
                         <div className={classNameError}>{t('description.error2_name_keys')}</div>
                     </div>
@@ -246,7 +251,7 @@ export default function ProductKeyForm(props) {
                             placeholder={t('description.volume_days')}
                             defaultValue={inputDuration}
                             onChange={onChangeInputDuration}
-                            className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+                            className={classInputErrorDuration}
                         />
                         <div className={classDurationError}>{t('description.error1_duration_keys')}</div>
                     </div>
@@ -271,12 +276,14 @@ export default function ProductKeyForm(props) {
                         <br></br>
                         <select className="p-1 px-2 outline-none w-2/3 bg-white"
                             value={typeKey}
+                            
                             onChange={onChangeTypeKey}
                         >
                             {options}
                         </select>
 
                     </div>
+                    {console.log(typeKey)}
 
                     <div className="mb-5">
                         <label
