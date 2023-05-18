@@ -5,7 +5,6 @@ module OperationsWithKey
   def self.generate_name
     while 0.zero?
       triar_name = (0...4).map { "#{generate_part_name}-" }.join.chop
-      puts(triar_name)
       return triar_name unless ProductKey.name_exist(triar_name).exists?
     end
   end
@@ -42,6 +41,7 @@ module OperationsWithKey
       key_obj.save
       0
     else
+      
       delta_time = key_obj.duration * (60 * 60 * 24) - (Time.current - key_obj.created_at)
       calcilation_work_days(delta_time)
     end

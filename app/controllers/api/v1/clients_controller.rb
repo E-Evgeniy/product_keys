@@ -85,23 +85,19 @@ module Api
         
         if params[:showKeys] == "all"
           product_keys = client_all_keys(client.product_keys)
-          puts("product_keys = #{product_keys}")
         end
         render(json: { product_keys: })
       end
 
-      def check_name_for_edit_key
+      def check_name_for_edit_key   
+    
          client_data = {}
 
-         puts("*** check_name_for_edit_key PARAMS *** ")
-        puts(params)
-        puts("------------------")
-
-        if params[:clientNameEdit].nil?
+        if (params[:changeName] == 'false' && params[:client_id] == '') || (params[:changeName] == 'true' && params[:nameClient] == '')
           client_data['client_allowed'] = true
-          client_data['client_id'] = ''
+          client_data['client_id'] = ''        
         else
-          client_data = forming_client_data(client_data, params[:changeName], params[:client_id], params[:clientNameEdit])
+          client_data = forming_client_data(client_data, params[:changeName], params[:client_id], params[:nameClient])          
         end
 
         render(json: { client_data: })

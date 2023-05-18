@@ -136,7 +136,7 @@ export default function ClientsTable() {
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                <Link to={String(client.id)}>{client.name}</Link>
+                                                <Link to={`/clients/${client.id}/product_keys?showKeys=all`} >{client.all_keys}</Link>
                                                 </div>
                                             </td>
 

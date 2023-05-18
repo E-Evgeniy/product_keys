@@ -14,7 +14,13 @@ export default function ProductKeyForm(props) {
     const [nameProductKey, setNameProductKey] = useState('')
     const [clientAllowed, setClientAllowed] = useState('')
 
+    const [changeDuration, setChangeDuration] = useState(false)
     const [changeName, setChangeName] = useState(false)
+    const [changeNameF, setChangeNameF] = useState(0)
+    const [changeNameT, setChangeNameT] = useState(0)
+    //const changeName = useRef(false);
+
+
     const [changeTypeKey, setChangeTypeKey] = useState(false)
     const [typeKeyId, setTypeKeyId] = useState(false)
 
@@ -29,6 +35,7 @@ export default function ProductKeyForm(props) {
     const [durationPK, setDurationPK] = useState('')
     const [clientName, setClientName] = useState('')
 
+    const [durationFromTable, setDurationFromTable] = useState(true)
 
     useEffect(() => {
         //Load parametrs key
@@ -73,7 +80,7 @@ export default function ProductKeyForm(props) {
             method: "PATCH",
             headers: { "Content-Type": "application/json", },
             body: JSON.stringify({
-                productKey: {
+                product_key: {
                     duration: durationPK,
                     infinite_period: inputInfiniteKey,
                     types_of_key_id: typeKeyId,
@@ -93,10 +100,9 @@ export default function ProductKeyForm(props) {
         window.location.replace(`/clients/${props.client_id}`);
     };
 
-    const [durationFromTable, setDurationFromTable] = useState(true)
     useEffect(() => {
         //Check input parametrs
-        const apiEndpoint = `/api/v1/product_key/check_fields?inputVolumeKeys=${1}&inputDurationKeys=${inputDuration}&changeCheckbox=${inputInfiniteKey}`
+        const apiEndpoint = `/api/v1/product_key/check_duration?changeDuration=${changeDuration}&inputDurationKeys=${inputDuration}&changeCheckbox=${inputInfiniteKey}&product_id=${props.product_key_id}`
 
         fetch(apiEndpoint)
             .then(response => response.json())
@@ -108,9 +114,11 @@ export default function ProductKeyForm(props) {
 
     useEffect(() => {
         //load TypeKey id
-        const apiEndpoint = `/api/v1/type_key/find_id?nameTypeKey=${typeKey}&changeTypeKey=${changeTypeKey}&nameEditTypeKey=${typeKey}`
-        .then(response => response.json())
-        .then(data => {
+        const apiEndpoint = `/api/v1/type_key/find_id?nameTypeKey=${typeKey}&changeTypeKey=${changeTypeKey}&productKeyId=${props.product_key_id}`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
                 setTypeKeyId(data["type_key_id"])
             }
             );
@@ -127,23 +135,32 @@ export default function ProductKeyForm(props) {
             }
             );
     }, [searchFileldsDuration])
-
+    
     useEffect(() => {
         //Check input client name
         const apiEndpoint = `/api/v1/client/check_name_for_edit_key?nameClient=${clientName}&changeName=${changeName}&client_id=${props.client_id}`
 
         fetch(apiEndpoint)
             .then(response => response.json())
-            .then(data => {
-                setClientId(data["client"])
+            .then(data => {                
+                setClientId(data["client_data"]['client_id'])
+                setClientAllowed(data["client_data"]['client_allowed'])
             }
             );
     }, [searchFileldClientName])
 
+
     const onChangeClientName = (e) => {
-        setClientName(e.target.value);
-        setSearchFileldClientName(e.target.value);
+        //setChangeName(true)
         setChangeName(true)
+        setClientName(e.target.value);
+        setChangeNameF(changeNameF + 1)
+    }
+
+    if (changeNameF != changeNameT) {
+        setChangeNameT(changeNameF)
+        setSearchFileldClientName(changeNameF + 1);
+
     }
 
     const onSearchTextChangeInputComment = (e) => {
@@ -164,34 +181,23 @@ export default function ProductKeyForm(props) {
     const onChangeInputDuration = (e) => {
         setInputDuration(e.target.value);
         setSearchFileldsDuration(e.target.value);
+        setSearchFilelds(e.target.value);
+        setChangeDuration(true)
     }
 
-    useEffect(() => {
-        //Check input client name
-        const apiEndpoint = `/api/v1/client/check_name_for_edit_key?clientNameEdit=${clientName}&changeName=${changeName}&client_id=${props.client_id}`
-
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                setClientId(data["client_data"]["client_id"]),
-                setClientAllowed(data["client_data"]["client_allowed"])
-            }
-            );
-    }, [searchFileldClientName])
-      
-
-    let classNameError = "text-red-600"
-    let classInputError = "w-full rounded-md border border-[#f44336] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#f44336] focus:shadow-md"
-
-    if (clientAllowed) {
-        classNameError = "invisible"
-        classInputError = "w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+    
+    let classNameError = "invisible"
+    let classInputError = "w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+    if (!clientAllowed) {
+        classNameError = "text-red-600"
+        classInputError = "w-full rounded-md border border-[#f44336] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#f44336] focus:shadow-md" 
     }
 
     let classNameButton = "hover:zshadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none disabled:opacity-75"
 
     let disableButton = false
-    if ((durationFromTable == false && inputInfiniteKey == false) || (clientId == false)) {
+    
+    if ((durationFromTable == false && inputInfiniteKey == false) || (clientAllowed == false)) {
         disableButton = true
     }
 
@@ -206,7 +212,6 @@ export default function ProductKeyForm(props) {
     const loadingSection = (<div>{t('description.loading')}</div>)
 
     const dataSection = (
-
         <div className="flex items-center justify-center p-12">
 
             <div className="mx-auto w-full max-w-[550px]">
@@ -283,7 +288,6 @@ export default function ProductKeyForm(props) {
                         </select>
 
                     </div>
-                    {console.log(typeKey)}
 
                     <div className="mb-5">
                         <label
@@ -326,5 +330,6 @@ export default function ProductKeyForm(props) {
     } else {
         return dataSection
     }
+
 
 }

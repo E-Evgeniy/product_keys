@@ -81,10 +81,11 @@ module Api
       end
 
       def find_id
-        unless params[:changeTypeKey]
-          type_key_id = TypesOfKey.where(name: params[:nameEditTypeKey])[0].id
-        else          
-          type_key_id = TypesOfKey.where(name: params[:nameTypeKey])[0].id
+        if params[:changeTypeKey] == 'false'
+          pk = ProductKey.find(params[:productKeyId])
+          type_key_id = pk.types_of_key.id
+        else        
+          type_key_id = TypesOfKey.where(name: params[:nameTypeKey]).first.id
         end
 
         render(json: { type_key_id: })

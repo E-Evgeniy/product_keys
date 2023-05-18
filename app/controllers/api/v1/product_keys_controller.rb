@@ -6,7 +6,7 @@ module Api
     # ProductKeysController
     class ProductKeysController < BaseController
       def create
-        puts("PARAMS = #{params}")
+        
         for i in (0..params["productKey"]["volumeKeys"].to_i - 1) do
           product_key = forming_product_key(ProductKey.new, params["productKey"])
 
@@ -30,7 +30,7 @@ module Api
 
       def checkfields
         rec_volume_keys = check_volume(params[:inputVolumeKeys].to_f)
-        rec_duration_keys = check_volume(params[:inputDurationKeys].to_f, params[:changeCheckbox])
+        rec_duration_keys = check_volume(params[:inputDurationKeys].to_f)
 
         render(json: { rec_volume_keys:, rec_duration_keys: })
       end
@@ -58,17 +58,33 @@ module Api
       
 
       def update
-        puts("*** PARAMS *** ")
-        puts(params)
-        puts("------------------")
-        
-        pk = ProductKey.find(params[:id])
-        pk.status = true
-        pk.client_id = params[:productKey][:client_id]
-        pk.duration = params[:productKey][:client_id]
+        product_key = ProductKey.find(params[:id])
+
+        if product_key.update(product_key_params)
+          render(json: {}, status: :created)
+        else
+          render json: { error: product_key.errors.messages }, status: 422
+        end
+      end
+
+      def check_duration
+        if params[:changeDuration] == 'false'
+          duration = ProductKey.find(params[:product_id]).duration
+        else
+          duration = params[:inputDurationKeys]
+        end
+
+        rec_duration_keys = check_volume(duration.to_f)
+
+        render(json: { rec_duration_keys: })
+
       end
 
       private
+
+      def product_key_params
+        params.require(:product_key).permit(:infinite_period, :duration, :types_of_key_id, :comment, :client_id, :status)
+      end
 
       def forming_product_key(product_key, data_key)
         product_key.name = OperationsWithKey.generate_name
@@ -82,7 +98,6 @@ module Api
       end
 
       def check_volume(num, infinityKey = false)
-        puts("NUM = #{num} infinityKey =#{infinityKey}")
         if (num.positive? && (num - num.to_i).zero?) || (infinityKey == true)
           true
         else
