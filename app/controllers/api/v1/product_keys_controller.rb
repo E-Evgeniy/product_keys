@@ -74,10 +74,18 @@ module Api
           duration = params[:inputDurationKeys]
         end
 
-        rec_duration_keys = check_volume(duration.to_f)
+        rec_duration_keys = check_duration_for_edit(duration.to_f)       
 
         render(json: { rec_duration_keys: })
 
+      end
+
+      def free_key
+        count_pk_free = ProductKey.where(client_id: nil).count
+
+        count_pk_free.zero? ? rezult = false : rezult = ProductKey.where(client_id: nil).last.id
+
+        render(json: { rezult: })
       end
 
       private
@@ -99,6 +107,14 @@ module Api
 
       def check_volume(num, infinityKey = false)
         if (num.positive? && (num - num.to_i).zero?) || (infinityKey == true)
+          true
+        else
+          false
+        end
+      end
+
+      def check_duration_for_edit(num, infinityKey = false)
+        if (num >= 0 && (num - num.to_i).zero?) || (infinityKey == true)
           true
         else
           false

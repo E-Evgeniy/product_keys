@@ -33,7 +33,7 @@ export default function ProductKeyForm(props) {
     const [commentProductKey, setCommentProductKey] = useState('')
     const [inputDuration, setInputDuration] = useState(0)
     const [durationPK, setDurationPK] = useState('')
-    const [clientName, setClientName] = useState('')
+    const [clientName, setClientName] = useState(props.clientName)
 
     const [durationFromTable, setDurationFromTable] = useState(true)
 
@@ -86,7 +86,7 @@ export default function ProductKeyForm(props) {
                     types_of_key_id: typeKeyId,
                     comment: commentProductKey,
                     client_id: clientId,
-                    status: true
+                    status: status_key
                 },
             }),
         })
@@ -124,6 +124,8 @@ export default function ProductKeyForm(props) {
             );
     }, [searchFileldTypeKey])
 
+    let status_key = true
+
     useEffect(() => {
         //Check input parametrs
         const apiEndpoint = `/api/v1/product_key/calculation_need_duration?duration=${inputDuration}&id=${props.product_key_id}`
@@ -132,6 +134,10 @@ export default function ProductKeyForm(props) {
             .then(response => response.json())
             .then(data => {
                 setDurationPK(data["duration"])
+                console.log(data["duration"] )
+                if (data["duration"] == '0') {
+                    status_key = false
+                }
             }
             );
     }, [searchFileldsDuration])

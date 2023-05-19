@@ -6,12 +6,26 @@ import ProductKeyFormEdit from "./product_key_form_edit"
 const ClientEdit = () => {
 
     const { t } = useTranslation();
+    const [clientName, setClientName] = useState('')
 
     let client_id = useLocation().pathname.split('clients/')[1];
     client_id = client_id.split('/product_keys')[0];
 
     let product_key_id = useLocation().pathname.split('product_keys/')[1];
     product_key_id = product_key_id.split('/edit')[0];
+
+    useEffect(() => {
+        //Load parametrs key
+
+        const apiEndpoint = `/api/v1/product_key/find_name/${client_id}`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setClientName(data["client_name"])
+            }
+            );
+    }, [])
 
     const menuLeftTextClass = () => {
         return (
@@ -36,7 +50,7 @@ const ClientEdit = () => {
                         </div>
 
                         <div className="h-70 col-span-6 rounded-md h-100">
-                        < ProductKeyFormEdit product_key_id={product_key_id} client_id ={client_id}/>
+                        < ProductKeyFormEdit product_key_id={product_key_id} client_id ={client_id} client_name={clientName} />
                         </div>
                     </div>
                 </section>

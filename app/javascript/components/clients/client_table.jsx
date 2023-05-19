@@ -81,8 +81,8 @@ const ClientTable = () => {
                                 <tr key={loadedClient.id}>
 
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                                        <div className="text-gray-900 whitespace-no-wrap">
-                                            {loadedClient.name}
+                                        <div className="text-gray-900 whitespace-no-wrap">                                            
+                                            <NavLink to={`/clients/${loadedClient.id}/edit`} >{loadedClient.name}</NavLink>
                                         </div>
                                     </td>
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">

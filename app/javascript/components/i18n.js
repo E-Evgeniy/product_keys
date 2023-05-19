@@ -101,7 +101,8 @@ i18n
                 client_name: 'Имя клиента',
                 error2_name_keys: 'Такого клиента не существует',
                 product_keys_client: 'Ключи клиента ',
-                get_free_key: 'Дать свободный ключ'
+                get_free_key: 'Дать свободный ключ',
+                save: 'Сохранить'
                 
 
               }

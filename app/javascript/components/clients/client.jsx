@@ -1,12 +1,34 @@
-import React from "react";
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import ClientTable from "./client_table"
+import React, { useState, useEffect } from "react";
 
 
 const Client = () => {
     const { t } = useTranslation();
+    const [getFreeKey, setGetFreeKey] = useState(false)
     let location = useLocation().pathname.split('clients/')[1];
+
+
+    useEffect(() => {
+        //Hit the server and get the places
+
+        const apiEndpoint = `/api/v1/product_key/free_key`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data['rezult'])
+                setGetFreeKey(data["rezult"])
+            }
+            );
+    }, [])
+
+    let showGetFreeKey = "invisible py-3 border-b-2  hover:bg-indigo-200"
+
+    if (getFreeKey != 'false') {
+        showGetFreeKey = "py-3 border-b-2  hover:bg-indigo-200"
+    }
 
     return (
         <div>        
@@ -18,10 +40,7 @@ const Client = () => {
                                 <h1 className="text-center text-xl bg-white py-2 rounded-md border-b-2 text-gray-600 font-bold">{t('description.menu')}</h1>
                                 <div className="bg-white rounded-md list-none  text-center ">                                                                        
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href={`${location}/product_keys/new`} className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.new_key')}</a></li>
-                                    <li className="py-3 border-b-2  hover:bg-indigo-200"><a href={`${location}/product_keys/new`} className="invisible list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.get_free_key')}</a></li>
-                                    <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="/clients" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.clients')}</a></li>
-                                    <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="#" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">Отчёт об изменениях</a></li>
-                                    <li className="py-3  hover:bg-indigo-200"><a href="#" className="list-none border-b-2 hover:text-indigo-900 hover:text-lg hover:font-bold">ВЫЙТИ!</a></li>
+                                    <li className={showGetFreeKey}><a href={`/clients/${location}/product_keys/${getFreeKey}/edit`} className=" list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.get_free_key')}</a></li>
                                 </div>
                             </div>
                         </div>

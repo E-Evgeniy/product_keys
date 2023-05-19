@@ -105,6 +105,16 @@ module Api
         render(json: { client_data: })
       end
 
+      def find_client_name
+        if params[:client_id].empty
+          client_name = ''
+        else
+          client_name = Client.find(params[:client_id]).name
+        end
+
+        render(json: { client_name: })
+      end
+
       private
 
       def forming_client_data(client_data, changeName, client_id, nameClient)
