@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 const ClientTable = () => {
@@ -96,12 +96,12 @@ const ClientTable = () => {
 
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="text-gray-900 whitespace-no-wrap">
-                                            {loadedClient.activy_keys}
+                                        <NavLink to={`/clients/${location}/product_keys?showKeys=activity`}> {loadedClient.activy_keys}</NavLink>
                                         </div>
                                     </td>
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="text-gray-900 whitespace-no-wrap">
-                                        <Link to={`/clients/${location}/product_keys?showKeys=all`} >{loadedClient.all_keys}</Link>
+                                        <NavLink to={`/clients/${location}/product_keys?showKeys=all`} >{loadedClient.all_keys}</NavLink>
                                         </div>
                                     </td>
                                     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">

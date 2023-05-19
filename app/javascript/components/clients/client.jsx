@@ -18,6 +18,7 @@ const Client = () => {
                                 <h1 className="text-center text-xl bg-white py-2 rounded-md border-b-2 text-gray-600 font-bold">{t('description.menu')}</h1>
                                 <div className="bg-white rounded-md list-none  text-center ">                                                                        
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href={`${location}/product_keys/new`} className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.new_key')}</a></li>
+                                    <li className="py-3 border-b-2  hover:bg-indigo-200"><a href={`${location}/product_keys/new`} className="invisible list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.get_free_key')}</a></li>
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="/clients" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.clients')}</a></li>
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="#" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">Отчёт об изменениях</a></li>
                                     <li className="py-3  hover:bg-indigo-200"><a href="#" className="list-none border-b-2 hover:text-indigo-900 hover:text-lg hover:font-bold">ВЫЙТИ!</a></li>

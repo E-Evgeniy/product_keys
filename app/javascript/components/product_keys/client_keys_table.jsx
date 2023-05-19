@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 export default function ClientKeysTable(props) {
@@ -84,7 +84,7 @@ export default function ClientKeysTable(props) {
 
             <div className=" flex items-center justify-between pb-6">
                 <div>
-                    <h2 className="text-gray-600 font-semibold"> {`${t('description.product_keys')} ${nameClient}`}</h2>
+                    <h2 className="text-gray-600 font-semibold"> {`${t('description.product_keys_client')}`} <NavLink className="text-blue-950 text-xl" to={`/clients/${props.client_id}`} > {` ${nameClient}`}</NavLink></h2>
                 </div>
                 <div className="flex items-center justify-between">
                     <div className="flex bg-gray-50 items-center p-2 rounded-md">

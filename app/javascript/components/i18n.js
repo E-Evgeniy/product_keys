@@ -99,7 +99,9 @@ i18n
                 infiniteKey: 'Бесконечный срок действия',
                 product_key_edit: 'Редактирование ключа',
                 client_name: 'Имя клиента',
-                error2_name_keys: 'Такого клиента не существует'
+                error2_name_keys: 'Такого клиента не существует',
+                product_keys_client: 'Ключи клиента ',
+                get_free_key: 'Дать свободный ключ'
                 
 
               }

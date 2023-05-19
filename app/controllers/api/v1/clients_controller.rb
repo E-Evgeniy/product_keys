@@ -82,16 +82,18 @@ module Api
 
       def client_keys
         client = Client.find(params[:client_id])
-        
-        if params[:showKeys] == "all"
+
+        if params[:showKeys] == 'all'
           product_keys = client_all_keys(client.product_keys)
+        elsif params[:showKeys] == 'activity'
+          product_keys = client_all_keys(client.product_keys.where(status: true))
         end
         render(json: { product_keys: })
       end
 
       def check_name_for_edit_key   
-    
-         client_data = {}
+
+        client_data = {}
 
         if (params[:changeName] == 'false' && params[:client_id] == '') || (params[:changeName] == 'true' && params[:nameClient] == '')
           client_data['client_allowed'] = true
