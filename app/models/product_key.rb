@@ -4,7 +4,7 @@
 class ProductKey < ApplicationRecord
   include OperationsWithKey
 
-  belongs_to :client
+  belongs_to :client, optional: true
   belongs_to :types_of_key
   validates :name, presence: true, uniqueness: true
 

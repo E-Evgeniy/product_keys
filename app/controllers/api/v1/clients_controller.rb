@@ -80,7 +80,82 @@ module Api
         render(json: { client:, client_edit: })
       end
 
+      def client_keys
+        client = Client.find(params[:client_id])
+
+        if params[:showKeys] == 'all'
+          product_keys = client_all_keys(client.product_keys)
+        elsif params[:showKeys] == 'activity'
+          product_keys = client_all_keys(client.product_keys.where(status: true))
+        end
+        render(json: { product_keys: })
+      end
+
+      def check_name_for_edit_key   
+
+        client_data = {}
+
+        if (params[:changeName] == 'false' && params[:client_id] == '') || (params[:changeName] == 'true' && params[:nameClient] == '')
+          client_data['client_allowed'] = true
+          client_data['client_id'] = ''        
+        else
+          client_data = forming_client_data(client_data, params[:changeName], params[:client_id], params[:nameClient])          
+        end
+
+        render(json: { client_data: })
+      end
+
+      def find_client_name
+        if params[:client_id].empty?
+          client_name = ''
+        else
+          client_name = Client.find(params[:client_id]).name
+        end
+
+        puts('0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000')
+        puts(client_name)
+
+        render(json: { client_name: })
+      end
+
       private
+
+      def forming_client_data(client_data, changeName, client_id, nameClient)
+        client = find_client(changeName, client_id, nameClient)
+
+        if !client.nil?
+          client_data['client_allowed'] = true
+          client_data['client_id'] = client.id
+        else
+          client_data['client_allowed'] = false
+          client_data['client_id'] = ''
+        end
+
+        client_data
+      end
+
+      def find_client(changeName, client_id, client_name)
+        if changeName == 'false'
+          Client.find(client_id)
+        else
+          Client.where(name: client_name).first
+        end
+      end
+
+      def client_all_keys(keys)
+        keys = keys.map do |key|
+          {
+            id: key.id,
+            name: key.name,
+            comment: key.comment,
+            duration: OperationsWithKey.working_days(key),
+            type_key: key.types_of_key.name,
+            status: key.status,
+            created_at: key.created_at.strftime("%d.%m.%Y")
+          }
+        end
+        keys
+      end
 
       def validates_client(inputName, inputEmail)
         client = {}

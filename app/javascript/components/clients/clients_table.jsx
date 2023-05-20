@@ -8,14 +8,13 @@ export default function ClientsTable() {
     const { t } = useTranslation();
 
     useEffect(() => {
-        //Hit the server and get the places
+        //Get clients
 
         const apiEndpoint = "/api/v1/clients"
 
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
-                console.log(data["clients"])
                 setLoadedClients(data["clients"])
                 setloading(false)
             }
@@ -54,7 +53,6 @@ export default function ClientsTable() {
         )
     }
 
-
     const dataSection = (
 
         <div className="bg-white p-8 rounded-md w-full">
@@ -79,31 +77,31 @@ export default function ClientsTable() {
                             <thead>
                                 <tr>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.name')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.email')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.comment')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.date_created')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.active_keys')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.all_keys')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.actions')}
                                     </th>
                                 </tr>
@@ -113,36 +111,36 @@ export default function ClientsTable() {
                                     return (
                                         <tr key={client.id}>
 
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div className="text-gray-900 whitespace-no-wrap">
                                                     <Link to={String(client.id)}>{client.name}</Link>
                                                 </div>
                                             </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">{client.email}</p>
                                             </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div className="text-gray-900 whitespace-no-wrap">
                                                     {client.comment}
                                                 </div>
                                             </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div className="text-gray-900 whitespace-no-wrap">
                                                     {output_date(client.created_at)}
                                                 </div>
                                             </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div className="text-gray-900 whitespace-no-wrap">
                                                     {client.all_keys}
                                                 </div>
                                             </td>
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                    {client.all_keys}
+                                                <Link to={`/clients/${client.id}/product_keys?showKeys=all`} >{client.all_keys}</Link>
                                                 </div>
                                             </td>
 
-                                            <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                            <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div className="text-gray-900 whitespace-no-wrap">
 
                                                     <div className="flex items-stretch ...">
@@ -185,5 +183,3 @@ export default function ClientsTable() {
     }
 }
 
-// Add some javascript to replace the div where = 'places-list-container'
-// with com=ntent render above
