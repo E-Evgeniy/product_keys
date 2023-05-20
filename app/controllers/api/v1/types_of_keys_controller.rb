@@ -65,19 +65,16 @@ module Api
 
       def names_types_keys
         names_types_of_keys = []
-        id_types_of_keys = []
         TypesOfKey.order(name: :asc).each do |types_of_key|
           names_types_of_keys << types_of_key.name
-          id_types_of_keys << types_of_key.id
         end
 
         if !params[:product_key_id].nil? && !names_types_of_keys.empty?
           data_form = forming_names_tpk(names_types_of_keys, params[:product_key_id])
           names_types_of_keys = data_form['names']
-          id_types_of_keys = forming_id_tpk(data_form['index'], id_types_of_keys) unless data_form['index'].nil?
         end
 
-        render(json: { names_types_of_keys:, id_types_of_keys: })
+        render(json: { names_types_of_keys: })
       end
 
       def find_id

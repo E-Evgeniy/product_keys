@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ const ClientEdit = () => {
     useEffect(() => {
         //Load parametrs key
 
-        const apiEndpoint = `/api/v1/product_key/find_name/${client_id}`
+        const apiEndpoint = `/api/v1/client/find_client_name?client_id=${client_id}`
 
         fetch(apiEndpoint)
             .then(response => response.json())

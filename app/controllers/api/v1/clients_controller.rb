@@ -106,11 +106,14 @@ module Api
       end
 
       def find_client_name
-        if params[:client_id].empty
+        if params[:client_id].empty?
           client_name = ''
         else
           client_name = Client.find(params[:client_id]).name
         end
+
+        puts('0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000')
+        puts(client_name)
 
         render(json: { client_name: })
       end

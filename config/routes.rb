@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get 'api/v1/client/find_for_edit', to: 'api/v1/clients#find_for_edit'
   get '/api/v1/client/product_keys', to: 'api/v1/clients#client_keys'
   get '/api/v1/client/check_name_for_edit_key', to: 'api/v1/clients#check_name_for_edit_key'
+  get '/api/v1/client/find_client_name', to: 'api/v1/clients#find_client_name'
 
   namespace :api do
     namespace :v1 do
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
   get '/api/v1/product_key/check_duration', to: 'api/v1/product_keys#check_duration'
   get '/api/v1/product_key/calculation_need_duration', to: 'api/v1/product_keys#calculation_need_duration'
   get '/api/v1/product_key/free_key', to: 'api/v1/product_keys#free_key'
+
 
   get '*path', to: 'react#home'
 end

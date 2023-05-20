@@ -33,7 +33,7 @@ export default function ProductKeyForm(props) {
     const [commentProductKey, setCommentProductKey] = useState('')
     const [inputDuration, setInputDuration] = useState(0)
     const [durationPK, setDurationPK] = useState('')
-    const [clientName, setClientName] = useState(props.clientName)
+    const [clientName, setClientName] = useState('')
 
     const [durationFromTable, setDurationFromTable] = useState(true)
 
@@ -47,7 +47,6 @@ export default function ProductKeyForm(props) {
             .then(data => {
                 setNameProductKey(data["product_key"].name)
                 setInputDuration(data["duration"])
-                setClientName(data["client_name"])
                 setInputInfiniteKey(data["product_key"].infinite_period)
                 setCommentProductKey(data["product_key"].comment)
 
@@ -134,7 +133,6 @@ export default function ProductKeyForm(props) {
             .then(response => response.json())
             .then(data => {
                 setDurationPK(data["duration"])
-                console.log(data["duration"] )
                 if (data["duration"] == '0') {
                     status_key = false
                 }
@@ -239,7 +237,7 @@ export default function ProductKeyForm(props) {
                             name="fClientName"
                             id="fVolumeDays"
                             placeholder={t('description.client_name')}
-                            defaultValue={clientName}
+                            defaultValue={props.client_name}
                             onChange={onChangeClientName}
                             className={classInputError}
                         />

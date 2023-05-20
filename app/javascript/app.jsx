@@ -25,8 +25,10 @@ function App() {
     return (
         <div>
             <UpperElements />
+            
             <BrowserRouter>
             <Routes>
+            
                 <Route path="*" element={<MainPage />} />
                 <Route path="clients/" element={<Clients />} />
                 <Route path="clients/:id" element={<Client />} />

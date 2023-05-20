@@ -1,6 +1,9 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 export default function UpperElements() {
+    const { t } = useTranslation();
+    const classNameUpElement = "text-gray-700 hover:text-indigo-600 text-md "
     return (
         <div>
             <header>
@@ -16,9 +19,10 @@ export default function UpperElements() {
                             <div className="flex items-center">
 
                                 <ul className="sm:flex space-x-4 hidden items-center">
-                                    <li><a href="#" className="text-gray-700 hover:text-indigo-600 text-md ">Главная</a></li>
+                                    <li><a href="/" className={classNameUpElement}> {t('description.main')} </a></li>
+                                    <li><a href="/clients" className={classNameUpElement}> {t('description.clients')} </a></li>
                                     <li><a href="#" className="text-gray-700 hover:text-indigo-600 text-md ">Ключи</a></li>
-                                    <li><a href="#" className="text-gray-700 hover:text-indigo-600 text-md ">Клиенты</a></li>
+                                    
                                 </ul>
 
                                 <div className="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">

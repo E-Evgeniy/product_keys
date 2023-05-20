@@ -52,27 +52,27 @@ const ClientTable = () => {
                             <thead>
                                 <tr>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.name')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.email')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.comment')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.active_keys')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.all_keys')}
                                     </th>
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="text-center px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.date_created')}
                                     </th>
                                 </tr>
@@ -80,31 +80,31 @@ const ClientTable = () => {
                             <tbody>
                                 <tr key={loadedClient.id}>
 
-                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="text-gray-900 whitespace-no-wrap">                                            
                                             <NavLink to={`/clients/${loadedClient.id}/edit`} >{loadedClient.name}</NavLink>
                                         </div>
                                     </td>
-                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="text-gray-900 whitespace-no-wrap">{loadedClient.email}</div>
                                     </td>
-                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="text-gray-900 whitespace-no-wrap">
                                             {loadedClient.comment}
                                         </div>
                                     </td>
 
-                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="text-gray-900 whitespace-no-wrap">
                                         <NavLink to={`/clients/${location}/product_keys?showKeys=activity`}> {loadedClient.activy_keys}</NavLink>
                                         </div>
                                     </td>
-                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="text-gray-900 whitespace-no-wrap">
                                         <NavLink to={`/clients/${location}/product_keys?showKeys=all`} >{loadedClient.all_keys}</NavLink>
                                         </div>
                                     </td>
-                                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                                    <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                         <div className="text-gray-900 whitespace-no-wrap">
                                         { createdClient }
                                         </div>
