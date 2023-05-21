@@ -5,9 +5,14 @@ module Api
   module V1
     # ProductKeysController
     class ProductKeysController < BaseController
+      def index
+        product_keys = ProductKey.all
+
+        render(json: { product_keys: })
+      end
+
       def create
-        
-        for i in (0..params["productKey"]["volumeKeys"].to_i - 1) do
+        for i in (0..params['productKey']['volumeKeys'].to_i - 1) do
           product_key = forming_product_key(ProductKey.new, params["productKey"])
 
           if product_key.save
