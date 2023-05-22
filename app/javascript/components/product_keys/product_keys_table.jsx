@@ -2,37 +2,25 @@ import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
-export default function ClientKeysTable(props) {
+export default function ProducrKeysTable() {
     const [loading, setloading] = useState(true)
     const [nameClient, setNameClient] = useState('')
-    const [clientKeys, setClientKeys] = useState([])
+    const [productKeys, setProductKeys] = useState([])
     const { t } = useTranslation();
 
     useEffect(() => {
-        //Request client's name
+        //Request product keys
 
-        const apiEndpoint = "/api/v1/clients/" + props.client_id
+        const apiEndpoint = "/api/v1/product_keys"
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
-                setNameClient(data["client"].name)
-            }
-            );
-    }, [])
-
-    useEffect(() => {
-        //Request on client keys
-
-        const apiEndpoint = `/api/v1/client/product_keys?client_id=${props.client_id}&showKeys=${props.show_keys}`  
-
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {                
-                setClientKeys(data["product_keys"])
+                setProductKeys(data["product_keys"])
                 setloading(false)
             }
             );
     }, [loading])
+
 
     const deleteClientKey = async (id) => {
         await fetch(`/api/v1/product_keys/${id}`, {
@@ -81,12 +69,6 @@ export default function ClientKeysTable(props) {
     const dataSection = (
 
         <div className="bg-white p-8 rounded-md w-full">
-
-            <div className=" flex items-center justify-between pb-6">
-                <div>
-                    <h2 className="text-gray-600 font-semibold"> {`${t('description.product_keys_client')}`} <NavLink className="text-blue-950 text-xl" to={`/clients/${props.client_id}`} > {` ${nameClient}`}</NavLink></h2>
-                </div>
-            </div>
             <div>
                 <div className="">
                     <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
@@ -121,24 +103,20 @@ export default function ClientKeysTable(props) {
                                         className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.client')}
                                     </th>
-                                    <th
-                                        className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                                        {t('description.actions')}
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {clientKeys.map((clientKey, index) => {
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {productKeys.map((productKey, index) => {
                                     return (
-                                        <tr key={clientKey.id}>
+                                        <tr key={productKey.id}>
 
                                             <td className="px-5 py-150 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                    <Link to={String(clientKey.id)}>{clientKey.name}</Link>
+                                                    <Link to={String(productKey.id)}>{productKey.name}</Link>
                                                     
                                                 </div>
                                             </td>  
-                                            {statusKey(clientKey.status)}
+                                            {statusKey(productKey.status)}
                                             <td className={clasStatusKey}>
                                                 <div className="text-gray-900 whitespace-no-wrap">                                                    
                                                     {status}
@@ -146,56 +124,33 @@ export default function ClientKeysTable(props) {
                                             </td> 
                                             <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                    {durationDescription(clientKey.duration)}
+                                                    {durationDescription(productKey.duration)}
                                                     {duration}
                                                 </div>
                                             </td>                                                                                      
                                             
                                             
                                             <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
-                                                <p className="text-gray-900 whitespace-no-wrap">{clientKey.comment}</p>
+                                                <p className="text-gray-900 whitespace-no-wrap">{productKey.comment}</p>
                                             </td>
                                             <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                {clientKey.type_key}
+                                                {productKey.type_key}
                                                 </div>
                                             </td>
                                             <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                    {clientKey.created_at}
+                                                    {productKey.created_at}
                                                 </div>
                                             </td>
 
-                                            <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
-                                                <div className="text-gray-900 whitespace-no-wrap">
 
-                                                    <div className="flex items-stretch ...">
-
-                                                        <button
-                                                            onClick={() => editClientKey(clientKey.id)}                                                            
-                                                            className='relative inline-flex text-sx sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-                                                             text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#4040F2] mx-1 px-4 py-1 xs:py-1.5 xs:px-5'
-
-                                                        >
-                                                            {t('description.edit')}
-                                                        </button>
-
-
-                                                        <button
-                                                            className='relative inline-flex text-xs sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-                                                            text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
-                                                            onClick={() => deleteClientKey(clientKey.id)}
-                                                            
-                                                        >
-                                                            {t('description.delete')}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </td>
                                         </tr>
                                     )
                                 })}
-                            </tbody>
+                                    </tbody>
+                            
+
                            
                         </table>
                     </div>
