@@ -8,6 +8,18 @@ module Api
       def index
         product_keys = ProductKey.all
 
+        product_keys = ProductKey.order(created_at: :desc).map do |pk|
+          {
+            id: pk.id,
+            name: pk.name,
+            email: pk.email,
+            comment: pk.comment,
+            created_at: pk.created_at,
+            activy_keys: pk.product_keys.where(status: true).count,
+            all_keys: pk.product_keys.count,
+          }
+        end
+
         render(json: { product_keys: })
       end
 
