@@ -104,9 +104,7 @@ export default function ClientKeysTable(props) {
                                     <th
                                         className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.day_end_key')}
-                                    </th>
-
-                                    
+                                    </th>                                    
                                     <th
                                         className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.comment')}
@@ -118,6 +116,10 @@ export default function ClientKeysTable(props) {
                                     <th
                                         className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.date_created')}
+                                    </th>
+                                    <th
+                                        className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        {t('description.client')}
                                     </th>
                                     <th
                                         className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -208,6 +210,3 @@ export default function ClientKeysTable(props) {
         return dataSection
     }
 }
-
-// Add some javascript to replace the div where = 'places-list-container'
-// with com=ntent render above

@@ -2,7 +2,7 @@ import React from "react";
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
-import ClientsTable from "./clients_table"
+import ProducrKeysTable from "./product_keys_table"
 
 
 export default function Clients() {
@@ -32,7 +32,7 @@ export default function Clients() {
                         </div>
 
                         <div className="h-70 col-span-6 rounded-md h-100">
-                            <ClientsTable />
+                            <ProducrKeysTable />
                         </div>
                     </div>
                 </section>
