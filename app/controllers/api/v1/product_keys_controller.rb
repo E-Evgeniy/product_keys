@@ -12,11 +12,12 @@ module Api
           {
             id: pk.id,
             name: pk.name,
-            email: pk.email,
+            status: pk.status,
             comment: pk.comment,
+            duration: OperationsWithKey.working_days(pk),
             created_at: pk.created_at,
-            activy_keys: pk.product_keys.where(status: true).count,
-            all_keys: pk.product_keys.count,
+            type_of_key: pk.types_of_key.name,
+            client: pk.client,
           }
         end
 

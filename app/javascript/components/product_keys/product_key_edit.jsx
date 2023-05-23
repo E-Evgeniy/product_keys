@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import ProductKeyFormEdit from "./product_key_form_edit"
-const ClientEdit = () => {
+const ClientEdit = (props) => {
 
     const { t } = useTranslation();
     const [clientName, setClientName] = useState('')
@@ -14,17 +14,29 @@ const ClientEdit = () => {
     let product_key_id = useLocation().pathname.split('product_keys/')[1];
     product_key_id = product_key_id.split('/edit')[0];
 
+    if (client_id == '0') {
+        client_id = ''
+    }
+
+    
+
     useEffect(() => {
         //Load parametrs key
 
-        const apiEndpoint = `/api/v1/client/find_client_name?client_id=${client_id}`
+        if (client_id != '') {
 
-        fetch(apiEndpoint)
+           const apiEndpoint = `/api/v1/client/find_client_name?client_id=${client_id}`
+
+           fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
                 setClientName(data["client_name"])
             }
             );
+
+        }
+
+        
     }, [])
 
     const menuLeftTextClass = () => {

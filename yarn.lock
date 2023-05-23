@@ -14,10 +14,10 @@
   dependencies:
     "regenerator-runtime" "^0.13.11"
 
-"@esbuild/linux-x64@0.17.18":
-  "integrity" "sha512-66RmRsPlYy4jFl0vG80GcNRdirx4nVWAzJmXkevgphP1qf4dsLQCpSKGM3DUQCojwU1hnepI63gNZdrr02wHUA=="
-  "resolved" "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.17.18.tgz"
-  "version" "0.17.18"
+"@esbuild/linux-x64@0.17.19":
+  "integrity" "sha512-68ngA9lg2H6zkZcyp22tsVt38mlhWde8l3eJLWkyLrp4HwMUr3c1s/M2t7+kHIhvMjglIBrFpncX1SzMckomGw=="
+  "resolved" "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.17.19.tgz"
+  "version" "0.17.19"
 
 "@jridgewell/gen-mapping@^0.3.2":
   "integrity" "sha512-HLhSWOLRi875zjjMG/r+Nv0oCW8umGb0BgEhyX3dDX3egwZtB8PqLnjz3yedt8R5StBrzcg4aBpnh8UA9D1BoQ=="
@@ -77,10 +77,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     "fastq" "^1.6.0"
 
-"@remix-run/router@1.6.1":
-  "integrity" "sha512-YUkWj+xs0oOzBe74OgErsuR3wVn+efrFhXBWrit50kOiED+pvQe2r6MWY0iJMQU/mSVKxvNzL4ZaYvjdX+G7ZA=="
-  "resolved" "https://registry.npmjs.org/@remix-run/router/-/router-1.6.1.tgz"
-  "version" "1.6.1"
+"@remix-run/router@1.6.2":
+  "integrity" "sha512-LzqpSrMK/3JBAVBI9u3NWtOhWNw5AMQfrUFYB0+bDHTSw17z++WJLsPsxAuK+oSddsxk4d7F/JcdDPM1M5YAhA=="
+  "resolved" "https://registry.npmjs.org/@remix-run/router/-/router-1.6.2.tgz"
+  "version" "1.6.2"
 
 "any-promise@^1.0.0":
   "integrity" "sha512-7UvmKalWRt1wgjL1RrGxoSJW/0QZFIegpeGvZG9kjp8vrRu55XTHbwnqq2GpXm9uLbcuhxm3IqX9OB4MZR1b2A=="
@@ -202,33 +202,33 @@
   "resolved" "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.4.388.tgz"
   "version" "1.4.388"
 
-"esbuild@^0.17.18":
-  "integrity" "sha512-z1lix43jBs6UKjcZVKOw2xx69ffE2aG0PygLL5qJ9OS/gy0Ewd1gW/PUQIOIQGXBHWNywSc0floSKoMFF8aK2w=="
-  "resolved" "https://registry.npmjs.org/esbuild/-/esbuild-0.17.18.tgz"
-  "version" "0.17.18"
+"esbuild@^0.17.19":
+  "integrity" "sha512-XQ0jAPFkK/u3LcVRcvVHQcTIqD6E2H1fvZMA5dQPSOWb3suUbWbfbRf94pjc0bNzRYLfIrDRQXr7X+LHIm5oHw=="
+  "resolved" "https://registry.npmjs.org/esbuild/-/esbuild-0.17.19.tgz"
+  "version" "0.17.19"
   optionalDependencies:
-    "@esbuild/android-arm" "0.17.18"
-    "@esbuild/android-arm64" "0.17.18"
-    "@esbuild/android-x64" "0.17.18"
-    "@esbuild/darwin-arm64" "0.17.18"
-    "@esbuild/darwin-x64" "0.17.18"
-    "@esbuild/freebsd-arm64" "0.17.18"
-    "@esbuild/freebsd-x64" "0.17.18"
-    "@esbuild/linux-arm" "0.17.18"
-    "@esbuild/linux-arm64" "0.17.18"
-    "@esbuild/linux-ia32" "0.17.18"
-    "@esbuild/linux-loong64" "0.17.18"
-    "@esbuild/linux-mips64el" "0.17.18"
-    "@esbuild/linux-ppc64" "0.17.18"
-    "@esbuild/linux-riscv64" "0.17.18"
-    "@esbuild/linux-s390x" "0.17.18"
-    "@esbuild/linux-x64" "0.17.18"
-    "@esbuild/netbsd-x64" "0.17.18"
-    "@esbuild/openbsd-x64" "0.17.18"
-    "@esbuild/sunos-x64" "0.17.18"
-    "@esbuild/win32-arm64" "0.17.18"
-    "@esbuild/win32-ia32" "0.17.18"
-    "@esbuild/win32-x64" "0.17.18"
+    "@esbuild/android-arm" "0.17.19"
+    "@esbuild/android-arm64" "0.17.19"
+    "@esbuild/android-x64" "0.17.19"
+    "@esbuild/darwin-arm64" "0.17.19"
+    "@esbuild/darwin-x64" "0.17.19"
+    "@esbuild/freebsd-arm64" "0.17.19"
+    "@esbuild/freebsd-x64" "0.17.19"
+    "@esbuild/linux-arm" "0.17.19"
+    "@esbuild/linux-arm64" "0.17.19"
+    "@esbuild/linux-ia32" "0.17.19"
+    "@esbuild/linux-loong64" "0.17.19"
+    "@esbuild/linux-mips64el" "0.17.19"
+    "@esbuild/linux-ppc64" "0.17.19"
+    "@esbuild/linux-riscv64" "0.17.19"
+    "@esbuild/linux-s390x" "0.17.19"
+    "@esbuild/linux-x64" "0.17.19"
+    "@esbuild/netbsd-x64" "0.17.19"
+    "@esbuild/openbsd-x64" "0.17.19"
+    "@esbuild/sunos-x64" "0.17.19"
+    "@esbuild/win32-arm64" "0.17.19"
+    "@esbuild/win32-ia32" "0.17.19"
+    "@esbuild/win32-x64" "0.17.19"
 
 "escalade@^3.1.1":
   "integrity" "sha512-k0er2gUkLf8O0zKJiAhmkTnJlTvINGv7ygDNPbeIsX/TJjGJZHuh9B2UxbsaEkmlEo9MfhrSzmhIlhRlI2GXnw=="
@@ -322,10 +322,10 @@
   dependencies:
     "@babel/runtime" "^7.19.4"
 
-"i18next@^22.4.15", "i18next@>= 19.0.0":
-  "integrity" "sha512-yYudtbFrrmWKLEhl6jvKUYyYunj4bTBCe2qIUYAxbXoPusY7YmdwPvOE6fx6UIfWvmlbCWDItr7wIs8KEBZ5Zg=="
-  "resolved" "https://registry.npmjs.org/i18next/-/i18next-22.4.15.tgz"
-  "version" "22.4.15"
+"i18next@^22.5.0", "i18next@>= 19.0.0":
+  "integrity" "sha512-sqWuJFj+wJAKQP2qBQ+b7STzxZNUmnSxrehBCCj9vDOW9RDYPfqCaK1Hbh2frNYQuPziz6O2CGoJPwtzY3vAYA=="
+  "resolved" "https://registry.npmjs.org/i18next/-/i18next-22.5.0.tgz"
+  "version" "22.5.0"
   dependencies:
     "@babel/runtime" "^7.20.6"
 
@@ -562,28 +562,28 @@
     "loose-envify" "^1.1.0"
     "scheduler" "^0.23.0"
 
-"react-i18next@^12.2.2":
-  "integrity" "sha512-KBB6buBmVKXUWNxXHdnthp+38gPyBT46hJCAIQ8rX19NFL/m2ahte2KARfIDf2tMnSAL7wwck6eDOd/9zn6aFg=="
-  "resolved" "https://registry.npmjs.org/react-i18next/-/react-i18next-12.2.2.tgz"
-  "version" "12.2.2"
+"react-i18next@^12.3.1":
+  "integrity" "sha512-5v8E2XjZDFzK7K87eSwC7AJcAkcLt5xYZ4+yTPDAW1i7C93oOY1dnr4BaQM7un4Hm+GmghuiPvevWwlca5PwDA=="
+  "resolved" "https://registry.npmjs.org/react-i18next/-/react-i18next-12.3.1.tgz"
+  "version" "12.3.1"
   dependencies:
     "@babel/runtime" "^7.20.6"
     "html-parse-stringify" "^3.0.1"
 
-"react-router-dom@^6.11.1":
-  "integrity" "sha512-dPC2MhoPeTQ1YUOt5uIK376SMNWbwUxYRWk2ZmTT4fZfwlOvabF8uduRKKJIyfkCZvMgiF0GSCQckmkGGijIrg=="
-  "resolved" "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.11.1.tgz"
-  "version" "6.11.1"
+"react-router-dom@^6.11.2":
+  "integrity" "sha512-JNbKtAeh1VSJQnH6RvBDNhxNwemRj7KxCzc5jb7zvDSKRnPWIFj9pO+eXqjM69gQJ0r46hSz1x4l9y0651DKWw=="
+  "resolved" "https://registry.npmjs.org/react-router-dom/-/react-router-dom-6.11.2.tgz"
+  "version" "6.11.2"
   dependencies:
-    "@remix-run/router" "1.6.1"
-    "react-router" "6.11.1"
+    "@remix-run/router" "1.6.2"
+    "react-router" "6.11.2"
 
-"react-router@6.11.1":
-  "integrity" "sha512-OZINSdjJ2WgvAi7hgNLazrEV8SGn6xrKA+MkJe9wVDMZ3zQ6fdJocUjpCUCI0cNrelWjcvon0S/QK/j0NzL3KA=="
-  "resolved" "https://registry.npmjs.org/react-router/-/react-router-6.11.1.tgz"
-  "version" "6.11.1"
+"react-router@6.11.2":
+  "integrity" "sha512-74z9xUSaSX07t3LM+pS6Un0T55ibUE/79CzfZpy5wsPDZaea1F8QkrsiyRnA2YQ7LwE/umaydzXZV80iDCPkMg=="
+  "resolved" "https://registry.npmjs.org/react-router/-/react-router-6.11.2.tgz"
+  "version" "6.11.2"
   dependencies:
-    "@remix-run/router" "1.6.1"
+    "@remix-run/router" "1.6.2"
 
 "react@^18.2.0", "react@>= 16.8.0", "react@>=16.8":
   "integrity" "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ=="
