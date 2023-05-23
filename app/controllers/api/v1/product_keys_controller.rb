@@ -73,7 +73,6 @@ module Api
 
         render(json: { duration: })
       end
-      
 
       def update
         product_key = ProductKey.find(params[:id])

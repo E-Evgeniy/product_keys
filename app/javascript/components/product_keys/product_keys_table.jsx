@@ -87,7 +87,7 @@ export default function ProducrKeysTable() {
 
     const pathEdit = (data_pk) => {
         if (data_pk['client'] != null) {
-            return (`/clients/${data_pk['client']['id']}/product_keys/${data_pk.id}/edit`)
+            return (`/clients/${data_pk['client']['id']}/product_keys/${data_pk.id}/edit?loc=/product_keys`)
         } else {
             return (`/clients/0/product_keys/${data_pk.id}/edit`)
         }

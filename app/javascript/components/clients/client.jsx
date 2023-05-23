@@ -6,7 +6,7 @@ import React, { useState, useEffect } from "react";
 
 const Client = () => {
     const { t } = useTranslation();
-    const [getFreeKey, setGetFreeKey] = useState(false)
+    const [getFreeKey, setGetFreeKey] = useState('0')
     let location = useLocation().pathname.split('clients/')[1];
 
 
@@ -26,7 +26,7 @@ const Client = () => {
 
     let showGetFreeKey = "invisible py-3 border-b-2  hover:bg-indigo-200"
 
-    if (getFreeKey != 'false') {
+    if (getFreeKey != '0') {
         showGetFreeKey = "py-3 border-b-2  hover:bg-indigo-200"
     }
 
@@ -40,7 +40,7 @@ const Client = () => {
                                 <h1 className="text-center text-xl bg-white py-2 rounded-md border-b-2 text-gray-600 font-bold">{t('description.menu')}</h1>
                                 <div className="bg-white rounded-md list-none  text-center ">                                                                        
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href={`${location}/product_keys/new`} className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.new_key')}</a></li>
-                                    <li className={showGetFreeKey}><a href={`/clients/${location}/product_keys/${getFreeKey}/edit`} className=" list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.get_free_key')}</a></li>
+                                    <li className={showGetFreeKey}><a href={`/clients/${location}/product_keys/${getFreeKey}/edit?loc=/clients/${location}`} className=" list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.get_free_key')}</a></li>
                                 </div>
                             </div>
                         </div>

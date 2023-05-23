@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 export default function ProductKeyForm(props) {    
     const { t } = useTranslation();
+
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [loading, setloading] = useState(true)
 
@@ -96,8 +99,10 @@ export default function ProductKeyForm(props) {
             })
             .then((data) => console.log(data.message))
             .catch((error) => console.error(error));
-        window.location.replace(`/clients/${props.client_id}`);
+        window.location.replace(`${searchParams.get("loc")}`);
     };
+
+    console.log(searchParams.get("loc"))
 
     useEffect(() => {
         //Check input parametrs
