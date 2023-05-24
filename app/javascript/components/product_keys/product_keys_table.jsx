@@ -3,10 +3,14 @@ import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 export default function ProducrKeysTable() {
-    const [loading, setloading] = useState(true)
-    const [nameClient, setNameClient] = useState('')
-    const [productKeys, setProductKeys] = useState([])
     const { t } = useTranslation();
+
+    const [loading, setloading] = useState(true)
+    const [productKeys, setProductKeys] = useState([])
+    const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
+    const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
+    const [typeKey, setTypeKey] = useState('');
+    
 
     useEffect(() => {
         //Request product keys
@@ -20,6 +24,23 @@ export default function ProducrKeysTable() {
             }
             );
     }, [loading])
+
+    const options = loadedTypesOfKeys.map((typeKey, index) => {
+        return <option key={index}>{typeKey}</option>;
+    });
+
+
+    useEffect(() => {
+        //Load types_of_keys
+        const apiEndpoint = `/api/v1/type_of_key/names_types_keys`
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setLoadedTypesOfKeys(data["names_types_of_keys"])    
+            }
+            );
+    }, [])
 
 
     const deleteClientKey = async (id) => {
@@ -85,6 +106,11 @@ export default function ProducrKeysTable() {
         )
     }
 
+    let onChangeTypeKey = (e) => {
+        setTypeKey(e.target.value);
+        setSearchFileldTypeKey(e.target.value);    
+    }
+
     const pathEdit = (data_pk) => {
         if (data_pk['client'] != null) {
             return (`/clients/${data_pk['client']['id']}/product_keys/${data_pk.id}/edit?loc=/product_keys`)
@@ -103,6 +129,11 @@ export default function ProducrKeysTable() {
         });
         setloading(true)
     };
+
+    function changeCheckbox() {
+        setInputInfiniteKey(!inputInfiniteKey);
+        setSearchFilelds(Math.random());
+    }
     
     const loadingSection = (<div>{t('description.loading')}</div>)
 
@@ -110,6 +141,46 @@ export default function ProducrKeysTable() {
 
         <div className="bg-white p-8 rounded-md w-full">
             <div>
+            <div>
+                    <h2 className="text-gray-600 font-semibold">{t('description.product_keys')}</h2>
+                </div>
+            <div className=" flex items-center justify-between pb-6">
+                
+                <div className="flex items-center justify-between">
+                <div>
+                    <h1 className="text-gray-600 font-semibold px-2">{t('description.name')}</h1>
+                </div>
+                    <div className="flex bg-gray-50 items-center p-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                            fill="currentColor">
+                        </svg>
+                        <input className="w-48 bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder={t('description.name')}></input>
+                    </div>
+                </div>
+                 <div className="mb-5 block text-base font-medium text-[#07074D]">
+                        <p>{t('description.select_type_key')}</p>
+                        <br></br>
+                        <select className="p-1 px-2 outline-none w-2/3 bg-white"
+                            value={typeKey}
+                            
+                            onChange={onChangeTypeKey}
+                        >
+                            {options}
+                        </select>
+
+                    </div>
+
+                    <div className="mb-0 block text-base font-medium text-[#07074D]">
+
+                        <input
+                            type="checkbox"
+                            checked={inputInfiniteKey}
+                            onChange={changeCheckbox}
+                            className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded mr-2" />
+
+                        {t('description.infinite_key')}
+                    </div>
+            </div>
                 <div className="">
                     <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
                         <table className="min-w-full leading-normal table-fixed">
