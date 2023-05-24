@@ -71,7 +71,9 @@ i18n
                 error2_name_keys: 'Такого клиента не существует',
                 product_keys_client: 'Ключи клиента ',
                 get_free_key: 'Дать свободный ключ',
-                save: 'Сохранить',       
+                save: 'Сохранить',
+                get_infinite_keys: 'Бессрочные ключи',
+                status: 'Статус', 
                 
 
               }

@@ -23,8 +23,7 @@ export default function Clients() {
                         <div className="h-96 col-span-1 ">
                             <div className="bg-white  rounded-md">
                                 <h1 className="text-center text-xl bg-white py-2 rounded-md border-b-2 bg-indigo-100 text-gray-600 font-bold"> {t('description.menu')}</h1>
-                                <div className="bg-white rounded-md list-none  text-center ">
-                                    <li className="py-3 border-b-2  hover:bg-green-500"><NavLink to="/clients/new" className={menuLeftTextClass}> {t('description.new_client')} </NavLink></li>
+                                <div className="bg-white rounded-md list-none  text-center ">                                    
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><NavLink to="/" className={menuLeftTextClass}> {t('description.main')} </NavLink></li>
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><NavLink to="#" className={menuLeftTextClass}> {t('description.exit')} </NavLink></li>
                                 </div>
