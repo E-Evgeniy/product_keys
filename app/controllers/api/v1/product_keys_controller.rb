@@ -6,9 +6,8 @@ module Api
     # ProductKeysController
     class ProductKeysController < BaseController
       def index
-        product_keys = ProductKey.all
 
-        product_keys = ProductKey.order(created_at: :desc).map do |pk|
+        product_keys = GetProductKeys(params).order(created_at: :desc).map do |pk|
           {
             id: pk.id,
             name: pk.name,
@@ -106,6 +105,15 @@ module Api
       end
 
       private
+
+      def GetProductKeys(params)
+        need_name = forming_need_name(params[:find_name])
+
+      end
+
+      def forming_need_name(find_name)
+        find_name.empty? ? '' : %(name LIKE ?", "%#{find_name}%")
+      end
 
       def product_key_params
         params.require(:product_key).permit(:infinite_period, :duration, :types_of_key_id, :comment, :client_id, :status)
