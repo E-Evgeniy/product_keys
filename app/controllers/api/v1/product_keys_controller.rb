@@ -107,12 +107,27 @@ module Api
       private
 
       def GetProductKeys(params)
-        need_name = forming_need_name(params[:find_name])
+
+        result_find = find_name_PK(params[:findNamePK])
+        result_find = find_PK_with_checkbox(params[:inputInfiniteKey], 'infinite_period', result_find) if params[:inputInfiniteKey] == 'true'
+
+        puts("PARAMS = #{params}")
+
+        result_find
 
       end
 
-      def forming_need_name(find_name)
-        find_name.empty? ? '' : %(name LIKE ?", "%#{find_name}%")
+      def find_name_PK(need_name_PK)
+        if need_name_PK.empty?
+          ProductKey.all
+        else
+          ProductKey.where("name LIKE ?", "%#{need_name_PK}%")
+        end
+      end
+
+
+      def find_PK_with_checkbox(checkbox_data, checkbox_name, data_with_pk)
+        data_with_pk.where("#{checkbox_name} = ?", checkbox_data)
       end
 
       def product_key_params

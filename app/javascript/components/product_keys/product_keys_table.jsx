@@ -11,20 +11,23 @@ export default function ProducrKeysTable() {
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
     const [typeKey, setTypeKey] = useState('');
     const [statusKeyFind, setActiveKeyFind] = useState('All');
+    const [searchFileld, setSearchFileld] = useState('')
+    const [findNamePK, setFindNamePK] = useState('')
 
 
     useEffect(() => {
         //Request product keys
 
-        const apiEndpoint = "/api/v1/product_keys"
+        const apiEndpoint = `/api/v1/product_keys?findNamePK=${findNamePK}&inputInfiniteKey=${inputInfiniteKey}`
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
                 setProductKeys(data["product_keys"])
+                console.log(data["product_keys"])
                 setloading(false)
             }
             );
-    }, [loading])
+    }, [searchFileld])
 
     const options = loadedTypesOfKeys.map((typeKey, index) => {
         return <option key={index}>{typeKey}</option>;
@@ -112,8 +115,8 @@ export default function ProducrKeysTable() {
     }
 
     let onChangeTypeKey = (e) => {
-        setTypeKey(e.target.value);
-        setSearchFileldTypeKey(e.target.value);
+        setFindNamePK(e.target.value);
+        setSearchFileld(e.target.value);
     }
 
     const pathEdit = (data_pk) => {
@@ -135,9 +138,14 @@ export default function ProducrKeysTable() {
         setloading(true)
     };
 
-    function changeCheckbox() {
+    function changeInfiniteKey() {
         setInputInfiniteKey(!inputInfiniteKey);
-        setSearchFilelds(Math.random());
+        setSearchFileld(Math.random());
+    }
+
+    const onChangeNamePK = (e) => {
+        setFindNamePK(e.target.value);
+        setSearchFileld(e.target.value);
     }
 
     const loadingSection = (<div>{t('description.loading')}</div>)
@@ -146,9 +154,10 @@ export default function ProducrKeysTable() {
 
         <div className="bg-white p-8 rounded-md w-full">
             <div>
-                <div className="items-center">
+            <div className="items-center">
                     <h2 className="me-2 text-2xl text-gray-900 font-semibold text-center">{t('description.product_keys')}</h2>
                 </div>
+
                 <div className=" flex items-center justify-between pb-6">
 
                     <div className="flex items-center justify-between">
@@ -159,7 +168,12 @@ export default function ProducrKeysTable() {
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#07074D]" viewBox="0 0 20 20"
                                 fill="currentColor">
                             </svg>
-                            <input className="w-48 bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder={t('description.name')}></input>
+                            <input 
+                              className="w-48 bg-gray-50 outline-none ml-1 block "
+                              type="text"
+                              placeholder={t('description.name')}
+                              onChange={onChangeNamePK}>                                
+                            </input>
                         </div>
                     </div>
 
@@ -168,7 +182,7 @@ export default function ProducrKeysTable() {
                         <input
                             type="checkbox"
                             checked={inputInfiniteKey}
-                            onChange={changeCheckbox}
+                            onChange={changeInfiniteKey}
                             className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded mr-2" />
 
                         {t('description.get_infinite_keys')}
@@ -202,6 +216,8 @@ export default function ProducrKeysTable() {
 
                     </div>
                 </div>
+                
+                
                 <div className="">
                     <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
                         <table className="min-w-full leading-normal table-fixed">

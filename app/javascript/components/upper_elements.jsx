@@ -21,7 +21,7 @@ export default function UpperElements() {
                                 <ul className="sm:flex space-x-4 hidden items-center">
                                     <li><a href="/" className={classNameUpElement}> {t('description.main')} </a></li>
                                     <li><a href="/clients" className={classNameUpElement}> {t('description.clients')} </a></li>
-                                    <li><a href="#" className="text-gray-700 hover:text-indigo-600 text-md ">Ключи</a></li>
+                                    <li><a href="/product_keys" className="text-gray-700 hover:text-indigo-600 text-md ">{t('description.product_keys')}</a></li>
                                     
                                 </ul>
 
