@@ -72,7 +72,7 @@ i18n
                 product_keys_client: 'Ключи клиента ',
                 get_free_key: 'Дать свободный ключ',
                 save: 'Сохранить',
-                get_infinite_keys: 'Бессрочные ключи',
+                get_infinite_keys: 'Только бессрочные ключи',
                 status: 'Статус', 
                 
 

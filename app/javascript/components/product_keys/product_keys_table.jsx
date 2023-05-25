@@ -18,7 +18,7 @@ export default function ProducrKeysTable() {
     useEffect(() => {
         //Request product keys
 
-        const apiEndpoint = `/api/v1/product_keys?findNamePK=${findNamePK}&inputInfiniteKey=${inputInfiniteKey}`
+        const apiEndpoint = `/api/v1/product_keys?findNamePK=${findNamePK}&inputInfiniteKey=${inputInfiniteKey}&typeKey=${typeKey}`
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
@@ -115,7 +115,7 @@ export default function ProducrKeysTable() {
     }
 
     let onChangeTypeKey = (e) => {
-        setFindNamePK(e.target.value);
+        setTypeKey(e.target.value);
         setSearchFileld(e.target.value);
     }
 
