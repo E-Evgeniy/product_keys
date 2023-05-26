@@ -74,11 +74,6 @@ module Api
       def update
         product_key = ProductKey.find(params[:id])
 
-        puts('88888888888888888888888888888888888888888888888888888888888888888888')
-puts("params #{params}")
-        puts('88888888888888888888888888888888888888888888888888888888888888888888')
-
-
         params[:product_key][:created_at] = Time.current if params[:changeDuration]
         duration = params[:product_key][:duration].to_i
         params[:product_key][:duration] = duration + 1 if params[:product_key][:duration].to_i > 0

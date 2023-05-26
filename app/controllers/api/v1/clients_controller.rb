@@ -6,7 +6,7 @@ module Api
     # ClientsController
     class ClientsController < BaseController
       def index
-        clients = Client.order(name: :asc).map do |client|
+        clients = get_clients(params).order(name: :asc).map do |client|
           {
             id: client.id,
             name: client.name,
@@ -113,9 +113,29 @@ module Api
         end
 
         render(json: { client_name: })
-      end
+      end      
 
       private
+
+      def get_clients(params)
+        result_find = find_name(params[:findName])
+        result_find = find_next('email', params[:findEmail], result_find) if !params[:findEmail].empty?
+        result_find = find_next('comment', params[:findComment], result_find) if !params[:findComment].empty?
+
+        result_find
+      end
+
+      def find_name(need_name)
+        if need_name.empty?
+          Client.all
+        else
+          Client.where('name LIKE ?', "%#{need_name}%")
+        end
+      end
+
+      def find_next(need_param, data_param, data_with_clients)
+        data_with_clients.where("#{need_param} LIKE ?", "%#{data_param}%")
+      end
 
       def forming_client_data(client_data, changeName, client_id, nameClient)
         client = find_client(changeName, client_id, nameClient)

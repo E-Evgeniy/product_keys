@@ -5,13 +5,16 @@ import { useTranslation } from 'react-i18next';
 export default function ClientsTable() {
     const [loading, setloading] = useState(true)
     const [loadedClients, setLoadedClients] = useState([])
+    const [findName, setFindName] = useState('')
+    const [findEmail, setFindEmail] = useState('')
+    const [findComment, setFindComment] = useState('')
+    const [searchFileld, setSearchFileld] = useState('')
     const { t } = useTranslation();
 
     useEffect(() => {
         //Get clients
 
-        const apiEndpoint = "/api/v1/clients"
-
+        const apiEndpoint = `/api/v1/clients?findName=${findName}&findEmail=${findEmail}&findComment=${findComment}`
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
@@ -19,7 +22,7 @@ export default function ClientsTable() {
                 setloading(false)
             }
             );
-    }, [loading])
+    }, [searchFileld])
 
     const deleteClient = async (id) => {
         await fetch(`/api/v1/clients/${id}`, {
@@ -39,7 +42,7 @@ export default function ClientsTable() {
     };
 
     const editClient = async (id) => {
-        window.location.assign(`clients/${id}/edit`)        
+        window.location.assign(`clients/${id}/edit`)
     };
 
     const loadingSection = (<div>{t('description.loading')}</div>)
@@ -53,20 +56,80 @@ export default function ClientsTable() {
         )
     }
 
+    const onChangeName = (e) => {
+        setFindName(e.target.value);
+        setSearchFileld(e.target.value);
+    }
+
+    const onChangeEmail = (e) => {
+        setFindEmail(e.target.value);
+        setSearchFileld(e.target.value);
+    }
+
+    const onChangeComment = (e) => {
+        setFindComment(e.target.value);
+        setSearchFileld(e.target.value);
+    }
+
     const dataSection = (
 
         <div className="bg-white p-8 rounded-md w-full">
 
+            <div className="items-center">
+                <h2 className="me-2 text-2xl text-gray-900 font-semibold text-center">{t('description.clients')}</h2>
+                <br></br>
+            </div>
+
             <div className=" flex items-center justify-between pb-6">
-                <div>
-                    <h2 className="text-gray-600 font-semibold">{t('description.clients')}</h2>
-                </div>
                 <div className="flex items-center justify-between">
-                    <div className="flex bg-gray-50 items-center p-2 rounded-md">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20"
+                    <div>
+                        <h1 className="text-[#07074D] font-semibold px-2">{t('description.name')}</h1>
+                    </div>
+                    <div className="flex bg-gray-200 items-center p-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#07074D]" viewBox="0 0 20 20"
                             fill="currentColor">
                         </svg>
-                        <input className="w-48 bg-gray-50 outline-none ml-1 block " type="text" name="" id="" placeholder="search..."></input>
+                        <input
+                            className="w-48 bg-gray-50 outline-none ml-1 block "
+                            type="text"
+                            placeholder={t('description.name')}
+                            onChange={onChangeName}
+                        >
+                        </input>
+                    </div>
+                </div>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-[#07074D] font-semibold px-2">{t('description.email')}</h1>
+                    </div>
+                    <div className="flex bg-gray-200 items-center p-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#07074D]" viewBox="0 0 20 20"
+                            fill="currentColor">
+                        </svg>
+                        <input
+                            className="w-48 bg-gray-50 outline-none ml-1 block "
+                            type="text"
+                            placeholder={t('description.email')}
+                            onChange={onChangeEmail}
+                        >
+                        </input>
+                    </div>
+                </div>
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h1 className="text-[#07074D] font-semibold px-2">{t('description.comment')}</h1>
+                    </div>
+                    <div className="flex bg-gray-200 items-center p-2 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#07074D]" viewBox="0 0 20 20"
+                            fill="currentColor">
+                        </svg>
+                        <input
+                            className="w-48 bg-gray-50 outline-none ml-1 block "
+                            type="text"
+                            placeholder={t('description.comment')}
+                            onChange={onChangeComment}
+                        >
+                        </input>
                     </div>
                 </div>
             </div>
@@ -136,7 +199,7 @@ export default function ClientsTable() {
                                             </td>
                                             <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                <Link to={`/clients/${client.id}/product_keys?showKeys=all`} >{client.all_keys}</Link>
+                                                    <Link to={`/clients/${client.id}/product_keys?showKeys=all`} >{client.all_keys}</Link>
                                                 </div>
                                             </td>
 
