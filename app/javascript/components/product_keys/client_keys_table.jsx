@@ -73,7 +73,7 @@ export default function ClientKeysTable(props) {
     } 
 
     const editClientKey = async (id) => {
-        window.location.assign(`product_keys/${id}/edit?loc=/clients/${id}`)        
+        window.location.assign(`product_keys/${id}/edit?loc=/clients/${props.client_id}`)        
     };
     
     const loadingSection = (<div>{t('description.loading')}</div>)

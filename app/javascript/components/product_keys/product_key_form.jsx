@@ -26,8 +26,8 @@ const ProductKeyForm = (props) => {
             .then(response => response.json())
             .then(data => {
                 setLoadedTypesOfKeys(data["names_types_of_keys"])
-                setLoadedIdTypesOfKeys(data["id_types_of_keys"])
-                setInputTypeKey(data["id_types_of_keys"][0])
+                console.log(data["names_types_of_keys"][0])
+                setInputTypeKey(data["names_types_of_keys"][0])
                 setloading(false)
             }
             );
@@ -123,7 +123,6 @@ const ProductKeyForm = (props) => {
     let changeTypeKey = (e) => {
         setValue(e.target.value)
         setInputTypeKey(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)]);
-        console.log(loadedIdTypesOfKeys[loadedTypesOfKeys.indexOf(e.target.value)])
     }
 
     const dataSection = (

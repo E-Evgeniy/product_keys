@@ -29,6 +29,9 @@ module Api
         for i in (0..params['productKey']['volumeKeys'].to_i - 1) do
           product_key = forming_product_key(ProductKey.new, params["productKey"])
 
+          types_of_key = params["productKey"]["types_of_key_id"]
+          product_key.types_of_key_id = TypesOfKey.where('name=?',types_of_key).first.id
+
           if product_key.save
             render(json: {}, status: :created)
           else
@@ -68,16 +71,22 @@ module Api
         render(json: { product_key:, duration:, client_name: })
       end
 
-      def calculation_need_duration
-        product_key = ProductKey.find(params[:id])
-        duration = OperationsWithKey.need_duration(product_key, params[:duration].to_i)
-
-        render(json: { duration: })
-      end
-
       def update
         product_key = ProductKey.find(params[:id])
 
+        puts('88888888888888888888888888888888888888888888888888888888888888888888')
+puts("params #{params}")
+        puts('88888888888888888888888888888888888888888888888888888888888888888888')
+
+
+        params[:product_key][:created_at] = Time.current if params[:changeDuration]
+        duration = params[:product_key][:duration].to_i
+        params[:product_key][:duration] = duration + 1 if params[:product_key][:duration].to_i > 0
+          
+
+        puts("params #{params}")
+         
+      
         if product_key.update(product_key_params)
           render(json: {}, status: :created)
         else
@@ -114,10 +123,7 @@ module Api
         result_find = find_type_keys(params[:typeKey], result_find) if !params[:typeKey].empty?
         result_find = find_status_keys(params[:statusKey], result_find) if !params[:statusKey].empty?
 
-        puts("PARAMS = #{params}")
-
         result_find
-
       end
 
       def find_name_pk(need_name_pk)
@@ -155,7 +161,7 @@ module Api
       end
 
       def product_key_params
-        params.require(:product_key).permit(:infinite_period, :duration, :types_of_key_id, :comment, :client_id, :status)
+        params.require(:product_key).permit(:infinite_period, :duration, :types_of_key_id, :comment, :client_id, :status, :created_at)        
       end
 
       def forming_product_key(product_key, data_key)
