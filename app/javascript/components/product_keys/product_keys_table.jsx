@@ -10,30 +10,35 @@ export default function ProducrKeysTable() {
     const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
     const [typeKey, setTypeKey] = useState('');
-    const [statusKeyFind, setActiveKeyFind] = useState('All');
+    const [statusKeyFind, setStatusKeyFind] = useState('');
     const [searchFileld, setSearchFileld] = useState('')
     const [findNamePK, setFindNamePK] = useState('')
+
+    const ALL = t('description.all')
+    const ACTIVE = t('description.active_keys_arr')
+    const NO_ACTIVE = t('description.no_active_keys_arr')
 
 
     useEffect(() => {
         //Request product keys
 
-        const apiEndpoint = `/api/v1/product_keys?findNamePK=${findNamePK}&inputInfiniteKey=${inputInfiniteKey}&typeKey=${typeKey}`
+        const apiEndpoint = `/api/v1/product_keys?findNamePK=${findNamePK}&inputInfiniteKey=${inputInfiniteKey}&typeKey=${typeKey}&statusKey=${statusKeyFind}`
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
                 setProductKeys(data["product_keys"])
-                console.log(data["product_keys"])
                 setloading(false)
             }
             );
     }, [searchFileld])
 
+    if (loadedTypesOfKeys[0] != ALL) {loadedTypesOfKeys.unshift(ALL)} 
+
     const options = loadedTypesOfKeys.map((typeKey, index) => {
         return <option key={index}>{typeKey}</option>;
     });
 
-    const array_keys = ['Все', 'Активные', 'Неактивные'].map((statusKeyFind, index) => {
+    const array_keys = [ALL, ACTIVE, NO_ACTIVE].map((statusKeyFind, index) => {
         return <option key={index}>{statusKeyFind}</option>;
     });
 
@@ -148,6 +153,11 @@ export default function ProducrKeysTable() {
         setSearchFileld(e.target.value);
     }
 
+    const onChangeStatusKey = (e) => {
+        setStatusKeyFind(e.target.value);
+        setSearchFileld(e.target.value);
+    }
+
     const loadingSection = (<div>{t('description.loading')}</div>)
 
     const dataSection = (
@@ -209,7 +219,7 @@ export default function ProducrKeysTable() {
                         <select className="p-1 px-2 outline-none bg-white text-gray-700 mx-2"
                             value={statusKeyFind}
 
-                            onChange={onChangeTypeKey}
+                            onChange={onChangeStatusKey}
                         >
                             {array_keys}
                         </select>

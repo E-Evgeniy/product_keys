@@ -5,6 +5,8 @@ module Api
   module V1
     # ProductKeysController
     class ProductKeysController < BaseController
+      ALL = 'Все'
+      ACTIVITE = 'Активные'
       def index
 
         product_keys = GetProductKeys(params).order(created_at: :desc).map do |pk|
@@ -110,6 +112,7 @@ module Api
         result_find = find_name_pk(params[:findNamePK])
         result_find = find_PK_with_checkbox(params[:inputInfiniteKey], 'infinite_period', result_find) if params[:inputInfiniteKey] == 'true'
         result_find = find_type_keys(params[:typeKey], result_find) if !params[:typeKey].empty?
+        result_find = find_status_keys(params[:statusKey], result_find) if !params[:statusKey].empty?
 
         puts("PARAMS = #{params}")
 
@@ -126,11 +129,21 @@ module Api
       end
 
       def find_type_keys(type_key, data_with_pk)
-        if type_key.empty?
+        if type_key == ALL
           data_with_pk
         else
           id_type = TypesOfKey.where('name=?', "#{type_key}").first.id
           data_with_pk.where('types_of_key_id=?', "#{id_type}")
+        end
+      end
+
+      def find_status_keys(status_key, data_with_pk)
+        if status_key == ALL
+          data_with_pk
+        else
+          status = false
+          status = true if status_key == ACTIVITE
+          data_with_pk.where('status=?', "#{status}")
         end
       end
 

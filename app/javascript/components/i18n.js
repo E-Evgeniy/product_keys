@@ -73,7 +73,10 @@ i18n
                 get_free_key: 'Дать свободный ключ',
                 save: 'Сохранить',
                 get_infinite_keys: 'Только бессрочные ключи',
-                status: 'Статус', 
+                status: 'Статус',
+                all: 'Все',
+                no_active_keys_arr: 'Не активные',
+                active_keys_arr: 'Активные',
                 
 
               }
