@@ -28,7 +28,7 @@ export default function ClientsTable() {
             );
     }, [searchFileld, loading])
 
-    const deleteClient = async (id) => {
+    const RequestDeleteClient = async (id) => {
         await fetch(`/api/v1/clients/${id}`, {
             method: 'DELETE',
         }).then((response) => {
@@ -39,16 +39,15 @@ export default function ClientsTable() {
         setloading(true)
     };
 
-    const editClientYes = async () => {
-        console.log('ddd')
-        window.location.assign(`clients/${currentClient}/edit`)
-    }
-
-    const editClient = async (id, name) => {
+    const deleteClient = (id, name) => {
         setCurrentClient(name)
         setCurrentClientId(id)
         setShowModal(true)
-        //window.location.assign(`clients/${id}/edit`)
+    };
+
+
+    const editClient = async (id, name) => {
+        window.location.assign(`clients/${id}/edit`)
     };
 
     const loadingSection = (<div>{t('description.loading')}</div>)
@@ -85,22 +84,22 @@ export default function ClientsTable() {
                 onRequestClose={() => setShowModal(false)} >
                 <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
                     <div className="bg-white px-16 py-14 rounded-md text-center">
-                        <h1 className="text-xl mb-4 font-bold text-slate-500">{t('description.delete_client')} {currentClient}</h1>
+                        <h1 className="text-xl mb-4 font-bold text-slate-500">{t('description.delete_client')} {currentClient} {t('description.delete_and_key')}</h1>
                         <button 
                           className="bg-red-500 px-4 py-2 rounded-md text-md text-white"
                           onClick={() => {
                             
-                            deleteClient(currentClientId);
+                            RequestDeleteClient(currentClientId);
                             setShowModal(false)
                             
                         }}
-                          >
-                        Cancel</button>
+                          > {t('description.delete')}
+                        </button>
 
                         <button 
                           className="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold"
                           onClick={() => {setShowModal(false)}}>
-                            Ok</button>
+                            {t('description.cancel')}</button>
                     </div>
                 </div>
             </Modal>
@@ -251,8 +250,8 @@ text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#404
 
                                                             <button
                                                                 className='relative inline-flex text-xs sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
-                                                                onClick={() => deleteClient(client.id)}
+text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#f87171] px-4 py-1 xs:py-1.5 xs:px-5'
+                                                                onClick={() => deleteClient(client.id, client.name)}
                                                             >
                                                                 {t('description.delete')}
                                                             </button>

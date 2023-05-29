@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import Modal from 'react-modal';
 
 export default function ProducrKeysTable() {
     const { t } = useTranslation();
@@ -13,6 +14,9 @@ export default function ProducrKeysTable() {
     const [statusKeyFind, setStatusKeyFind] = useState('');
     const [searchFileld, setSearchFileld] = useState('')
     const [findNamePK, setFindNamePK] = useState('')
+    const [currentKey, setCurrentKey] = useState()
+    const [currentKeyId, setCurrentKeyId] = useState()
+    let [showModal, setShowModal] = useState(false)
 
     const ALL = t('description.all')
     const ACTIVE = t('description.active_keys_arr')
@@ -30,7 +34,7 @@ export default function ProducrKeysTable() {
                 setloading(false)
             }
             );
-    }, [searchFileld])
+    }, [searchFileld, loading])
 
     if (loadedTypesOfKeys[0] != ALL) {loadedTypesOfKeys.unshift(ALL)} 
 
@@ -54,18 +58,6 @@ export default function ProducrKeysTable() {
             }
             );
     }, [])
-
-
-    const deleteClientKey = async (id) => {
-        await fetch(`/api/v1/product_keys/${id}`, {
-            method: 'DELETE',
-        }).then((response) => {
-            if (response.ok) {
-                return response.json()
-            }
-        });
-        setloading(true)
-    };
 
     let status = t('description.no_active')
     let clasStatusKey = "px-3 py-5 border-b border-gray-200 bg-white text-sm text-center"
@@ -132,7 +124,7 @@ export default function ProducrKeysTable() {
         }
     }
 
-    const deleteProductKey = async (id) => {
+    const RequestDeleteProductKey = async (id) => {
         await fetch(`/api/v1/product_keys/${id}`, {
             method: 'DELETE',
         }).then((response) => {
@@ -158,9 +150,45 @@ export default function ProducrKeysTable() {
         setSearchFileld(e.target.value);
     }
 
+    const deleteProductKey = (id, name) => {
+        setCurrentKey(name)
+        setCurrentKeyId(id)
+        setShowModal(true)
+    };
+
     const loadingSection = (<div>{t('description.loading')}</div>)
 
     const dataSection = (
+        <div>
+            <Modal
+                isOpen={showModal}
+                ariaHideApp={false}
+                onRequestClose={() => setShowModal(false)} >
+                <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                    <div className="bg-white px-16 py-14 rounded-md text-center">
+                        <h1 className="text-xl mb-4 font-bold text-slate-500">{t('description.delete_key')} {currentKey} </h1>
+                        <button 
+                          className="bg-red-500 px-4 py-2 rounded-md text-md text-white"
+                          onClick={() => {
+                            
+                            RequestDeleteProductKey(currentKeyId);
+                            setShowModal(false)
+                            
+                        }}
+                          > {t('description.delete')}
+                        </button>
+
+                        <button 
+                          className="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold"
+                          onClick={() => {
+                            setloading(true);
+                            setShowModal(false);
+                            }}>
+                            {t('description.cancel')}</button>
+                    </div>
+                </div>
+            </Modal>
+        
 
         <div className="bg-white p-8 rounded-md w-full">
             <div>
@@ -318,7 +346,7 @@ export default function ProducrKeysTable() {
                                                         <button
                                                             className='relative inline-flex text-xs sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
                                                             text-white bg-[#3333D1] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
-                                                            onClick={() => deleteProductKey(productKey.id)}
+                                                            onClick={() => deleteProductKey(productKey.id, productKey.name)}
 
                                                         >
                                                             {t('description.delete')}
@@ -339,6 +367,7 @@ export default function ProducrKeysTable() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 

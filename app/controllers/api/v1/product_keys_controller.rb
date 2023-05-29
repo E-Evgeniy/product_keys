@@ -33,10 +33,16 @@ module Api
           product_key.types_of_key_id = TypesOfKey.where('name=?',types_of_key).first.id
 
           if product_key.save
-            render(json: {}, status: :created)
+            status_create = true
           else
-            render json: { error: product_key.errors.messages }, status: 422
-          end
+            status_create = false
+          end          
+        end
+
+        if status_create
+          render(json: {}, status: :ok)
+        else
+          render json: { error: product_key.errors.messages }, status: 422
         end
       end
 

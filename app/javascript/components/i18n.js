@@ -77,7 +77,11 @@ i18n
                 all: 'Все',
                 no_active_keys_arr: 'Не активные',
                 active_keys_arr: 'Активные',
-                delete_client: 'Вы хотите удалить клиента'
+                delete_client: 'Вы хотите удалить клиента',
+                delete_and_key: 'со всеми его ключами',
+                delete_key: 'Вы хотите удалить ключ',
+                delete_type_of_key: 'Вы хотите удалить тип ключа',
+                cancel: 'Отмена'
                 
 
               }
