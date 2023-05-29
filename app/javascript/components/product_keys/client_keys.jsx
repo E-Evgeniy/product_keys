@@ -8,7 +8,11 @@ import ClientKeysTable from "./client_keys_table"
 
 const ClientKeys = () => {
     const { t } = useTranslation();
-    const [searchParams, setSearchParams] = useSearchParams();
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const [objectsPerPage] = useState(10)
+    const [loading, setloading] = useState(true)
+    const [searchParams] = useSearchParams();
 
     let client_id = useLocation().pathname.split('clients/')[1];
     client_id = client_id.split('/product_keys')[0];
@@ -34,8 +38,10 @@ const ClientKeys = () => {
 
                         < ClientKeysTable show_keys={searchParams.get("showKeys")} client_id ={client_id}/>
     
-
+                       
                         </div>
+ 
+                        <h1>{localStorage.getItem('counter')}</h1>
                     </div>
                 </section>
             </main>

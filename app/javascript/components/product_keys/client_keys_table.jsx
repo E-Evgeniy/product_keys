@@ -6,6 +6,9 @@ export default function ClientKeysTable(props) {
     const [loading, setloading] = useState(true)
     const [nameClient, setNameClient] = useState('')
     const [clientKeys, setClientKeys] = useState([])
+
+    
+
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -75,6 +78,8 @@ export default function ClientKeysTable(props) {
     const editClientKey = async (id) => {
         window.location.assign(`product_keys/${id}/edit?loc=/clients/${props.client_id}`)        
     };
+
+    localStorage.setItem('counter', 100);
     
     const loadingSection = (<div>{t('description.loading')}</div>)
 
