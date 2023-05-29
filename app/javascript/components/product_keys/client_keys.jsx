@@ -11,11 +11,26 @@ const ClientKeys = () => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [objectsPerPage] = useState(10)
-    const [loading, setloading] = useState(true)
+    const [loadingClientKeys, setloadingClientKeys] = useState(true)
     const [searchParams] = useSearchParams();
+    const [clientKeys, setClientKeys] = useState([])
 
     let client_id = useLocation().pathname.split('clients/')[1];
     client_id = client_id.split('/product_keys')[0];
+
+    useEffect(() => {
+        //Request on client keys
+
+        const apiEndpoint = `/api/v1/client/product_keys?client_id=${client_id}&showKeys=${searchParams.get("showKeys")}`  
+
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {                
+                setClientKeys(data["product_keys"])
+                localStorage.setItem('loadingClientKeys', false);
+            }
+            );
+    }, [loading])
 
     return (
         <div>        

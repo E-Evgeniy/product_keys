@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 export default function ClientKeysTable(props) {
     const [loading, setloading] = useState(true)
     const [nameClient, setNameClient] = useState('')
-    const [clientKeys, setClientKeys] = useState([])
+    
 
     
 
@@ -22,20 +22,6 @@ export default function ClientKeysTable(props) {
             }
             );
     }, [])
-
-    useEffect(() => {
-        //Request on client keys
-
-        const apiEndpoint = `/api/v1/client/product_keys?client_id=${props.client_id}&showKeys=${props.show_keys}`  
-
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {                
-                setClientKeys(data["product_keys"])
-                setloading(false)
-            }
-            );
-    }, [loading])
 
     const deleteClientKey = async (id) => {
         await fetch(`/api/v1/product_keys/${id}`, {
@@ -79,7 +65,7 @@ export default function ClientKeysTable(props) {
         window.location.assign(`product_keys/${id}/edit?loc=/clients/${props.client_id}`)        
     };
 
-    localStorage.setItem('counter', 100);
+    
     
     const loadingSection = (<div>{t('description.loading')}</div>)
 
