@@ -57,7 +57,7 @@ module Api
         client = Client.find(params[:id])
 
         if client.destroy
-          render(json: {}, status: :deleted)
+          render(json: {}, status: 200)
         else
           render json: { error: client.errors.messages }, status: 422
         end

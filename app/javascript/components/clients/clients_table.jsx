@@ -11,6 +11,7 @@ export default function ClientsTable() {
     const [findComment, setFindComment] = useState('')
     const [searchFileld, setSearchFileld] = useState('')
     const [currentClient, setCurrentClient] = useState()
+    const [currentClientId, setCurrentClientId] = useState()
     let [showModal, setShowModal] = useState(false)
     const { t } = useTranslation();
 
@@ -25,21 +26,15 @@ export default function ClientsTable() {
                 setloading(false)
             }
             );
-    }, [searchFileld])
+    }, [searchFileld, loading])
 
     const deleteClient = async (id) => {
         await fetch(`/api/v1/clients/${id}`, {
             method: 'DELETE',
         }).then((response) => {
-            if (response.status === 200) {
-                setPosts(
-                    clients.filter((client) => {
-                        return client.id !== id;
-                    })
-                );
-            } else {
-                return;
-            }
+            if (response.ok) {
+                return response.json()
+              }
         });
         setloading(true)
     };
@@ -48,9 +43,10 @@ export default function ClientsTable() {
         console.log('ddd')
         window.location.assign(`clients/${currentClient}/edit`)
     }
-    
-    const editClient = async (id) => {
-        setCurrentClient(id)
+
+    const editClient = async (id, name) => {
+        setCurrentClient(name)
+        setCurrentClientId(id)
         setShowModal(true)
         //window.location.assign(`clients/${id}/edit`)
     };
@@ -83,19 +79,30 @@ export default function ClientsTable() {
 
     const dataSection = (
         <div>
-            <Modal 
-             isOpen = {showModal}
-             ariaHideApp={false}
-             onRequestClose= {() => setShowModal(false)} >
-                You are sure?
-                <br></br>
+            <Modal
+                isOpen={showModal}
+                ariaHideApp={false}
+                onRequestClose={() => setShowModal(false)} >
+                <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                    <div className="bg-white px-16 py-14 rounded-md text-center">
+                        <h1 className="text-xl mb-4 font-bold text-slate-500">{t('description.delete_client')} {currentClient}</h1>
+                        <button 
+                          className="bg-red-500 px-4 py-2 rounded-md text-md text-white"
+                          onClick={() => {
+                            
+                            deleteClient(currentClientId);
+                            setShowModal(false)
+                            
+                        }}
+                          >
+                        Cancel</button>
 
-                <button onClick={() => {
-                    setShowModal(false); 
-                    editClientYes
-                    }}>Yes</button>
-                <br></br>
-                <button onClick={() => setShowModal(false)}>No</button>
+                        <button 
+                          className="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold"
+                          onClick={() => {setShowModal(false)}}>
+                            Ok</button>
+                    </div>
+                </div>
             </Modal>
             <div className="bg-white p-8 rounded-md w-full">
 
@@ -233,7 +240,7 @@ export default function ClientsTable() {
                                                         <div className="flex items-stretch ...">
 
                                                             <button
-                                                                onClick={() => editClient(client.id)}
+                                                                onClick={() => editClient(client.id, client.name)}
                                                                 className='relative inline-flex text-sx sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
 text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#4040F2] mx-1 px-4 py-1 xs:py-1.5 xs:px-5'
 
@@ -270,4 +277,3 @@ text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#404
         return dataSection
     }
 }
-

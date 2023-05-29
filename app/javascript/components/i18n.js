@@ -77,6 +77,7 @@ i18n
                 all: 'Все',
                 no_active_keys_arr: 'Не активные',
                 active_keys_arr: 'Активные',
+                delete_client: 'Вы хотите удалить клиента'
                 
 
               }
