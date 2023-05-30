@@ -19,8 +19,6 @@ export default function ClientKeysTable(props) {
             );
     }, [])
 
-    console.log(localStorage.getItem('pageClientKeys'))
-
     const deleteClientKey = async (id) => {
         await fetch(`/api/v1/product_keys/${id}`, {
             method: 'DELETE',
@@ -42,6 +40,7 @@ export default function ClientKeysTable(props) {
             status = t('description.active')
             clasStatusKey = "px-3 py-5 border-b border-gray-200 bg-green-400 text-sm text-center"
         } else {
+            status = t('description.no_active')
             clasStatusKey = "px-3 py-5 border-b border-gray-200 bg-red-400 text-sm text-center"
         }
     }
@@ -191,14 +190,10 @@ export default function ClientKeysTable(props) {
             </div>
         </div>
     )
-    console.log('45454')
-    console.log(localStorage.getItem('loadingClientKeys'))
 
     if (localStorage.getItem('loadingClientKeys') == true) {
-        console.log('222')
         return loadingSection
     } else {
-        console.log('333')
         return dataSection
     }
 }
