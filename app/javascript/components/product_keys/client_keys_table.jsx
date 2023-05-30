@@ -3,11 +3,7 @@ import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 
 export default function ClientKeysTable(props) {
-    const [loading, setloading] = useState(true)
     const [nameClient, setNameClient] = useState('')
-    
-
-    
 
     const { t } = useTranslation();
 
@@ -23,6 +19,8 @@ export default function ClientKeysTable(props) {
             );
     }, [])
 
+    console.log(localStorage.getItem('pageClientKeys'))
+
     const deleteClientKey = async (id) => {
         await fetch(`/api/v1/product_keys/${id}`, {
             method: 'DELETE',
@@ -31,7 +29,8 @@ export default function ClientKeysTable(props) {
                 return response.json()
               }
         });
-        setloading(true)
+        window.location.replace(`${localStorage.getItem('pageClientKeys')}`);
+
     };
 
     let status = t('description.no_active')
@@ -117,7 +116,7 @@ export default function ClientKeysTable(props) {
                                 </tr>
                             </thead>
                             <tbody>
-                                {clientKeys.map((clientKey, index) => {
+                                {props.clientKeys.map((clientKey, index) => {
                                     return (
                                         <tr key={clientKey.id}>
 
@@ -192,10 +191,14 @@ export default function ClientKeysTable(props) {
             </div>
         </div>
     )
+    console.log('45454')
+    console.log(localStorage.getItem('loadingClientKeys'))
 
-    if (loading) {
+    if (localStorage.getItem('loadingClientKeys') == true) {
+        console.log('222')
         return loadingSection
     } else {
+        console.log('333')
         return dataSection
     }
 }

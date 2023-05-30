@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { useLocation, useSearchParams, NavLink } from 'react-router-dom';
 
@@ -11,7 +11,6 @@ const ClientKeys = () => {
 
     const [currentPage, setCurrentPage] = useState(1)
     const [objectsPerPage] = useState(10)
-    const [loadingClientKeys, setloadingClientKeys] = useState(true)
     const [searchParams] = useSearchParams();
     const [clientKeys, setClientKeys] = useState([])
 
@@ -30,7 +29,13 @@ const ClientKeys = () => {
                 localStorage.setItem('loadingClientKeys', false);
             }
             );
-    }, [loading])
+    }, [localStorage.getItem('loadingClientKeys')])
+
+    localStorage.setItem('pageClientKeys', `${useLocation().pathname}${useLocation().search}`)
+
+    const lastObjectsIndex = currentPage * objectsPerPage
+    const firstObjectsIndex = lastObjectsIndex - objectsPerPage
+    const currentObjects = clientKeys.slice(firstObjectsIndex, lastObjectsIndex)
 
     return (
         <div>        
@@ -51,12 +56,11 @@ const ClientKeys = () => {
 
                         <div className="h-70 col-span-6 bg-gradient-to-tr from-indigo-400 to-indigo-100 rounded-md h-100">
 
-                        < ClientKeysTable show_keys={searchParams.get("showKeys")} client_id ={client_id}/>
+                        < ClientKeysTable clientKeys={clientKeys} client_id ={client_id}/>
     
                        
                         </div>
- 
-                        <h1>{localStorage.getItem('counter')}</h1>
+
                     </div>
                 </section>
             </main>
