@@ -8,19 +8,16 @@ export default function ProducrKeysTable() {
 
     const [loading, setloading] = useState(true)
     const [productKeys, setProductKeys] = useState([])
-    const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
-    const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
-    const [typeKey, setTypeKey] = useState('');
-    const [statusKeyFind, setStatusKeyFind] = useState('');
-    const [searchFileld, setSearchFileld] = useState('')
-    const [findNamePK, setFindNamePK] = useState('')
+    
+    
+    
+
+
     const [currentKey, setCurrentKey] = useState()
     const [currentKeyId, setCurrentKeyId] = useState()
     let [showModal, setShowModal] = useState(false)
 
-    const ALL = t('description.all')
-    const ACTIVE = t('description.active_keys_arr')
-    const NO_ACTIVE = t('description.no_active_keys_arr')
+    
 
 
     useEffect(() => {
@@ -36,28 +33,10 @@ export default function ProducrKeysTable() {
             );
     }, [searchFileld, loading])
 
-    if (loadedTypesOfKeys[0] != ALL) {loadedTypesOfKeys.unshift(ALL)} 
-
-    const options = loadedTypesOfKeys.map((typeKey, index) => {
-        return <option key={index}>{typeKey}</option>;
-    });
-
-    const array_keys = [ALL, ACTIVE, NO_ACTIVE].map((statusKeyFind, index) => {
-        return <option key={index}>{statusKeyFind}</option>;
-    });
+    
 
 
-    useEffect(() => {
-        //Load types_of_keys
-        const apiEndpoint = `/api/v1/type_of_key/names_types_keys`
-
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                setLoadedTypesOfKeys(data["names_types_of_keys"])
-            }
-            );
-    }, [])
+    
 
     let status = t('description.no_active')
     let clasStatusKey = "px-3 py-5 border-b border-gray-200 bg-white text-sm text-center"
@@ -135,20 +114,8 @@ export default function ProducrKeysTable() {
         setloading(true)
     };
 
-    function changeInfiniteKey() {
-        setInputInfiniteKey(!inputInfiniteKey);
-        setSearchFileld(Math.random());
-    }
+    
 
-    const onChangeNamePK = (e) => {
-        setFindNamePK(e.target.value);
-        setSearchFileld(e.target.value);
-    }
-
-    const onChangeStatusKey = (e) => {
-        setStatusKeyFind(e.target.value);
-        setSearchFileld(e.target.value);
-    }
 
     const deleteProductKey = (id, name) => {
         setCurrentKey(name)
@@ -192,68 +159,7 @@ export default function ProducrKeysTable() {
 
         <div className="bg-white p-8 rounded-md w-full">
             <div>
-            <div className="items-center">
-                    <h2 className="me-2 text-2xl text-gray-900 font-semibold text-center">{t('description.product_keys')}</h2>
-                </div>
-
-                <div className=" flex items-center justify-between pb-6">
-
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-[#07074D] font-semibold px-2">{t('description.name')}</h1>
-                        </div>
-                        <div className="flex bg-gray-200 items-center p-2 rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#07074D]" viewBox="0 0 20 20"
-                                fill="currentColor">
-                            </svg>
-                            <input 
-                              className="w-48 bg-gray-50 outline-none ml-1 block "
-                              type="text"
-                              placeholder={t('description.name')}
-                              onChange={onChangeNamePK}>                                
-                            </input>
-                        </div>
-                    </div>
-
-                    <div className="mb-0 block text-base font-medium text-[#07074D]">
-
-                        <input
-                            type="checkbox"
-                            checked={inputInfiniteKey}
-                            onChange={changeInfiniteKey}
-                            className="bg-gray-50 border-gray-300 focus:ring-3 focus:ring-blue-300 h-4 w-4 rounded mr-2" />
-
-                        {t('description.get_infinite_keys')}
-                    </div>
-
-
-                    <div className=" mb-0 block text-base font-medium text-[#07074D]">
-
-                        {t('description.type_of_key')}
-
-                        <select className=" mx-2 outline-none bg-white text-gray-700"
-                            value={typeKey}
-
-                            onChange={onChangeTypeKey}
-                        >
-                            {options}
-                        </select>
-                    </div>
-
-                    <div className="mb-0 block text-base font-medium text-[#07074D]">
-
-                        {t('description.status')}
-
-                        <select className="p-1 px-2 outline-none bg-white text-gray-700 mx-2"
-                            value={statusKeyFind}
-
-                            onChange={onChangeStatusKey}
-                        >
-                            {array_keys}
-                        </select>
-
-                    </div>
-                </div>
+           
                 
                 
                 <div className="">
