@@ -4,7 +4,6 @@ import { NavLink } from 'react-router-dom';
 
 import ProducrKeysTable from "./product_keys_table"
 
-
 export default function Clients() {
 
     const { t } = useTranslation();
@@ -31,6 +30,7 @@ export default function Clients() {
                         </div>
 
                         <div className="h-70 col-span-6 rounded-md h-100">
+                            
                             <ProducrKeysTable />
                         </div>
                     </div>
