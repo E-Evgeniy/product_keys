@@ -191,12 +191,10 @@ export default function ClientKeysTable(props) {
         </div>
     )
 
-    if (localStorage.getItem('loadingClientKeys') == true) {
+    if (localStorage.getItem('loadingClientKeys') == 'true') {
         return loadingSection
     } else {
         return dataSection
     }
 }
 
-// Add some javascript to replace the div where = 'places-list-container'
-// with com=ntent render above

@@ -28,6 +28,7 @@ import ProductKeyEdit from "./components/product_keys/product_key_edit"
 function App() {
 
     localStorage.setItem('loadingClientKeys', true);
+    localStorage.setItem('loadingKeys', true);
 
     return (
         <div>

@@ -7,7 +7,7 @@ export default function Pagination (props) {
     for (let i = 1; i <= Math.ceil(props.totalObjects / props.objectsPerPage); i++) {
         pageNumbers.push(i)
     }
-
+    let classCurrentPage = ""
 
     let checkCurrentPage = (number) => {
 

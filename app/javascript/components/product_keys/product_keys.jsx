@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
-import ProducrKeysTable from "./product_keys_table"
+import ProducrKeysTable from "./product_keys_table";
+import Pagination from "../pagination";
 
 export default function Clients() {
     const [inputInfiniteKey, setInputInfiniteKey] = useState(false);
@@ -11,6 +12,9 @@ export default function Clients() {
     const [loadedTypesOfKeys, setLoadedTypesOfKeys] = useState([])
     const [typeKey, setTypeKey] = useState('');
     const [statusKeyFind, setStatusKeyFind] = useState('');
+    const [productKeys, setProductKeys] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [objectsPerPage] = useState(10)
 
     const { t } = useTranslation();
 
@@ -46,6 +50,27 @@ export default function Clients() {
             );
     }, [])
 
+    useEffect(() => {
+        //Request product keys
+
+        const apiEndpoint = `/api/v1/product_keys?findNamePK=${findNamePK}&inputInfiniteKey=${inputInfiniteKey}&typeKey=${typeKey}&statusKey=${statusKeyFind}`
+        fetch(apiEndpoint)
+            .then(response => response.json())
+            .then(data => {
+                setProductKeys(data["product_keys"])
+                localStorage.setItem('loadingKeys', false);
+            }
+            );
+    }, [searchFileld, localStorage.getItem('loadingKeys')])
+
+    console.log(localStorage.getItem('loadingKeys'))
+
+    const lastObjectsIndex = currentPage * objectsPerPage
+    const firstObjectsIndex = lastObjectsIndex - objectsPerPage
+    const currentObjects = productKeys.slice(firstObjectsIndex, lastObjectsIndex)
+
+    const paginate = pageNumber => setCurrentPage(pageNumber)
+
     if (loadedTypesOfKeys[0] != ALL) {loadedTypesOfKeys.unshift(ALL)} 
 
     const options = loadedTypesOfKeys.map((typeKey, index) => {
@@ -59,6 +84,16 @@ export default function Clients() {
     function changeInfiniteKey() {
         setInputInfiniteKey(!inputInfiniteKey);
         setSearchFileld(Math.random());
+    }
+
+    let onChangeTypeKey = (e) => {
+        setTypeKey(e.target.value);
+        setSearchFileld(e.target.value);
+    }
+
+    let onChangeStatusKey = (e) => {
+        setStatusKeyFind(e.target.value);
+        setSearchFileld(e.target.value);
     }
 
     return (
@@ -82,7 +117,6 @@ export default function Clients() {
                             </div>
 
                             <div className=" flex items-center justify-between pb-6">
-
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <h1 className="text-[#07074D] font-semibold px-2">{t('description.name')}</h1>
@@ -139,7 +173,8 @@ export default function Clients() {
 
                                 </div>
                             </div>
-                            <ProducrKeysTable />
+                            <ProducrKeysTable productKeys={currentObjects} />
+                            < Pagination objectsPerPage={objectsPerPage} totalObjects={productKeys.length} paginate={paginate} />
                         </div>
                     </div>
                 </section>

@@ -5,8 +5,6 @@ import { useLocation, useSearchParams, NavLink } from 'react-router-dom';
 import ClientKeysTable from "./client_keys_table"
 import Pagination from "../pagination"
 
-
-
 const ClientKeys = () => {
     const { t } = useTranslation();
 

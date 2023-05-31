@@ -3,39 +3,12 @@ import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-modal';
 
-export default function ProducrKeysTable() {
+export default function ProducrKeysTable(props) {
     const { t } = useTranslation();
-
-    const [loading, setloading] = useState(true)
-    const [productKeys, setProductKeys] = useState([])
-    
-    
-    
-
 
     const [currentKey, setCurrentKey] = useState()
     const [currentKeyId, setCurrentKeyId] = useState()
     let [showModal, setShowModal] = useState(false)
-
-    
-
-
-    useEffect(() => {
-        //Request product keys
-
-        const apiEndpoint = `/api/v1/product_keys?findNamePK=${findNamePK}&inputInfiniteKey=${inputInfiniteKey}&typeKey=${typeKey}&statusKey=${statusKeyFind}`
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                setProductKeys(data["product_keys"])
-                setloading(false)
-            }
-            );
-    }, [searchFileld, loading])
-
-    
-
-
     
 
     let status = t('description.no_active')
@@ -90,11 +63,6 @@ export default function ProducrKeysTable() {
         )
     }
 
-    let onChangeTypeKey = (e) => {
-        setTypeKey(e.target.value);
-        setSearchFileld(e.target.value);
-    }
-
     const pathEdit = (data_pk) => {
         if (data_pk['client'] != null) {
             return (`/clients/${data_pk['client']['id']}/product_keys/${data_pk.id}/edit?loc=/product_keys`)
@@ -108,13 +76,12 @@ export default function ProducrKeysTable() {
             method: 'DELETE',
         }).then((response) => {
             if (response.ok) {
-                return response.json()
+                
+                return response.json()                
             }
         });
-        setloading(true)
+        
     };
-
-    
 
 
     const deleteProductKey = (id, name) => {
@@ -139,6 +106,7 @@ export default function ProducrKeysTable() {
                           onClick={() => {
                             
                             RequestDeleteProductKey(currentKeyId);
+                            localStorage.setItem('loadingKeys', true);
                             setShowModal(false)
                             
                         }}
@@ -148,7 +116,7 @@ export default function ProducrKeysTable() {
                         <button 
                           className="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold"
                           onClick={() => {
-                            setloading(true);
+                            localStorage.setItem('loadingKeys', true);
                             setShowModal(false);
                             }}>
                             {t('description.cancel')}</button>
@@ -158,10 +126,7 @@ export default function ProducrKeysTable() {
         
 
         <div className="bg-white p-8 rounded-md w-full">
-            <div>
-           
-                
-                
+            <div>                                           
                 <div className="">
                     <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
                         <table className="min-w-full leading-normal table-fixed">
@@ -202,7 +167,7 @@ export default function ProducrKeysTable() {
                                 </tr>
                             </thead>
                             <tbody>
-                                {productKeys.map((productKey, index) => {
+                                {props.productKeys.map((productKey, index) => {
                                     return (
                                         <tr key={productKey.id}>
 
@@ -266,9 +231,6 @@ export default function ProducrKeysTable() {
                                     )
                                 })}
                             </tbody>
-
-
-
                         </table>
                     </div>
                 </div>
@@ -277,7 +239,7 @@ export default function ProducrKeysTable() {
         </div>
     )
 
-    if (loading) {
+    if (localStorage.getItem('loadingKeys') == 'true') {
         return loadingSection
     } else {
         return dataSection
