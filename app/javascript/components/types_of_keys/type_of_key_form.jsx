@@ -30,7 +30,7 @@ const TypesOfKeyForm = () => {
             .then((data) => console.log(data.message))
             .catch((error) => console.error(error));
         setloading(true)
-        window.open('/types_of_keys')
+        window.location.replace('/types_of_keys')
     };
 
 

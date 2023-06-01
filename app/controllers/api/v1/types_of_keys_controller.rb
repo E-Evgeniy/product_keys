@@ -39,7 +39,7 @@ module Api
         type_of_key = TypesOfKey.find(params[:id])
 
         if type_of_key.destroy
-          render(json: {}, status: :deleted)
+          render(json: {}, status: :ok)
         else
           render json: { error: type_of_key.errors.messages }, status: 422
         end

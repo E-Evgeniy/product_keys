@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 
 export default function ProductKeyForm(props) {    
     const { t } = useTranslation();
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [loading, setloading] = useState(true)
 
     const [searchFilelds, setSearchFilelds] = useState('')
-    const [searchFileldsDuration, setSearchFileldsDuration] = useState('')
     const [searchFileldClientName, setSearchFileldClientName] = useState('')
     const [searchFileldTypeKey, setSearchFileldTypeKey] = useState('')
 
@@ -18,8 +20,6 @@ export default function ProductKeyForm(props) {
     const [changeName, setChangeName] = useState(false)
     const [changeNameF, setChangeNameF] = useState(0)
     const [changeNameT, setChangeNameT] = useState(0)
-    //const changeName = useRef(false);
-
 
     const [changeTypeKey, setChangeTypeKey] = useState(false)
     const [typeKeyId, setTypeKeyId] = useState(false)
@@ -32,7 +32,6 @@ export default function ProductKeyForm(props) {
     const [clientId, setClientId] = useState(props.client_id);
     const [commentProductKey, setCommentProductKey] = useState('')
     const [inputDuration, setInputDuration] = useState(0)
-    const [durationPK, setDurationPK] = useState('')
     const [clientName, setClientName] = useState('')
 
     const [durationFromTable, setDurationFromTable] = useState(true)
@@ -80,14 +79,16 @@ export default function ProductKeyForm(props) {
             headers: { "Content-Type": "application/json", },
             body: JSON.stringify({
                 product_key: {
-                    duration: durationPK,
+                    duration: inputDuration,
                     infinite_period: inputInfiniteKey,
                     types_of_key_id: typeKeyId,
                     comment: commentProductKey,
                     client_id: clientId,
                     status: status_key
                 },
-            }),
+                changeDuration
+            }
+            ),
         })
             .then((response) => {
                 if (response.ok) {
@@ -96,7 +97,7 @@ export default function ProductKeyForm(props) {
             })
             .then((data) => console.log(data.message))
             .catch((error) => console.error(error));
-        window.location.replace(`/clients/${props.client_id}`);
+        window.location.replace(`${searchParams.get("loc")}`);
     };
 
     useEffect(() => {
@@ -125,20 +126,6 @@ export default function ProductKeyForm(props) {
 
     let status_key = true
 
-    useEffect(() => {
-        //Check input parametrs
-        const apiEndpoint = `/api/v1/product_key/calculation_need_duration?duration=${inputDuration}&id=${props.product_key_id}`
-
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                setDurationPK(data["duration"])
-                if (data["duration"] == '0') {
-                    status_key = false
-                }
-            }
-            );
-    }, [searchFileldsDuration])
     
     useEffect(() => {
         //Check input client name
@@ -155,7 +142,6 @@ export default function ProductKeyForm(props) {
 
 
     const onChangeClientName = (e) => {
-        //setChangeName(true)
         setChangeName(true)
         setClientName(e.target.value);
         setChangeNameF(changeNameF + 1)
@@ -184,7 +170,6 @@ export default function ProductKeyForm(props) {
 
     const onChangeInputDuration = (e) => {
         setInputDuration(e.target.value);
-        setSearchFileldsDuration(e.target.value);
         setSearchFilelds(e.target.value);
         setChangeDuration(true)
     }

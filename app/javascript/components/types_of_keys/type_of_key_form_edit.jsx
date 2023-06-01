@@ -68,7 +68,6 @@ const type_of_keyFormEdit = () => {
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
                 setNameFromTable(data["type_of_key"].inputName)
                 setCommentFromTable(data["type_of_key"].inputComment)
                 setEditName(data["type_of_key_edit"].name)

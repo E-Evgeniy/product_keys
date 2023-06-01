@@ -3,54 +3,24 @@ import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-modal';
 
-export default function ClientKeysTable(props) {
-    const [nameClient, setNameClient] = useState('')
-    let [showModal, setShowModal] = useState(false)
-    const [currentKey, setCurrentKey] = useState()
-    const [currentKeyId, setCurrentKeyId] = useState()
-
+export default function ProducrKeysTable(props) {
     const { t } = useTranslation();
 
-    useEffect(() => {
-        //Request client's name
-
-        const apiEndpoint = "/api/v1/clients/" + props.client_id
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                setNameClient(data["client"].name)
-            }
-            );
-    }, [])
-
-    const deleteClientKey = async (id) => {
-        await fetch(`/api/v1/product_keys/${id}`, {
-            method: 'DELETE',
-        }).then((response) => {
-            if (response.ok) {
-                return response.json()
-              }
-        });
-        window.location.replace(`${localStorage.getItem('pageClientKeys')}`);
-
-    };
-
-    const deleteProductKey = (id, name) => {
-        setCurrentKey(name)
-        setCurrentKeyId(id)
-        setShowModal(true)
-    };
+    const [currentKey, setCurrentKey] = useState()
+    const [currentKeyId, setCurrentKeyId] = useState()
+    const [delKey, setDelKey] = useState([])
+    let [showModal, setShowModal] = useState(false)
+    
 
     let status = t('description.no_active')
     let clasStatusKey = "px-3 py-5 border-b border-gray-200 bg-white text-sm text-center"
 
     let statusKey = (statusProductKey) => {
 
-        if (statusProductKey == true ) {
+        if (statusProductKey == true) {
             status = t('description.active')
             clasStatusKey = "px-3 py-5 border-b border-gray-200 bg-green-400 text-sm text-center"
         } else {
-            status = t('description.no_active')
             clasStatusKey = "px-3 py-5 border-b border-gray-200 bg-red-400 text-sm text-center"
         }
     }
@@ -67,20 +37,76 @@ export default function ClientKeysTable(props) {
         if (clientKey == -1) {
             duration = t('description.infiniteKey')
         }
-    } 
+    }
 
     const editClientKey = async (id) => {
-        window.location.assign(`product_keys/${id}/edit?loc=/clients/${props.client_id}`)        
+        window.location.assign(`product_keys/${id}/edit`)
     };
 
-    
-    
+    const PkClient = (client) => {
+        if (client != null) {
+            return (client['name'])
+        }
+    }
+
+    const PkClientId = (client) => {
+        if (client != null) {
+            return (client['id'])
+        }
+    }
+
+    const output_date = (volume_date) => {
+        let output_time = volume_date.split('T')[1]
+        output_time = output_time.split(':')[0] + ':' + output_time.split(':')[1]
+
+        return (
+            volume_date.split('T')[0] + ' ' + output_time
+        )
+    }
+
+    const needHide = (id) => {
+
+        let needHid = "invisible"
+
+        if (delKey.indexOf(id) == -1) {
+            needHid = "visible"
+        }
+
+        return needHid
+    }
+
+    const pathEdit = (data_pk) => {
+        if (data_pk['client'] != null) {
+            return (`/clients/${data_pk['client']['id']}/product_keys/${data_pk.id}/edit?loc=/product_keys`)
+        } else {
+            return (`/clients/0/product_keys/${data_pk.id}/edit`)
+        }
+    }
+
+    const RequestDeleteProductKey = async (id) => {
+        await fetch(`/api/v1/product_keys/${id}`, {
+            method: 'DELETE',
+        }).then((response) => {
+            if (response.ok) {
+                
+                return response.json()                
+            }
+        });
+        
+    };
+
+
+    const deleteProductKey = (id, name) => {
+        setCurrentKey(name)
+        setCurrentKeyId(id)
+        setShowModal(true)
+    };
+
     const loadingSection = (<div>{t('description.loading')}</div>)
 
     const dataSection = (
         <div>
-
-<Modal
+            <Modal
                 isOpen={showModal}
                 ariaHideApp={false}
                 onRequestClose={() => setShowModal(false)} >
@@ -91,7 +117,10 @@ export default function ClientKeysTable(props) {
                           className="bg-red-500 px-4 py-2 rounded-md text-md text-white"
                           onClick={() => {
                             
-                            deleteClientKey(currentKeyId);                           
+                            RequestDeleteProductKey(currentKeyId);
+                            let buffer_key = delKey
+                            buffer_key.push(currentKeyId)
+                            setDelKey(buffer_key)                            
                             setShowModal(false)
                             
                         }}
@@ -108,15 +137,10 @@ export default function ClientKeysTable(props) {
                     </div>
                 </div>
             </Modal>
+        
 
         <div className="bg-white p-8 rounded-md w-full">
-
-            <div className=" flex items-center justify-between pb-6">
-                <div>
-                    <h2 className="text-gray-600 font-semibold"> {`${t('description.product_keys_client')}`} <NavLink className="text-blue-950 text-xl" to={`/clients/${props.client_id}`} > {` ${nameClient}`}</NavLink></h2>
-                </div>
-            </div>
-            <div>
+            <div>                                           
                 <div className="">
                     <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
                         <table className="min-w-full leading-normal table-fixed">
@@ -131,13 +155,11 @@ export default function ClientKeysTable(props) {
                                         {t('description.key_status')}
                                     </th>
                                     <th
-                                        className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="px-6 py-3 w-20 h-20 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.day_end_key')}
                                     </th>
-
-                                    
                                     <th
-                                        className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.comment')}
                                     </th>
                                     <th
@@ -150,80 +172,79 @@ export default function ClientKeysTable(props) {
                                     </th>
                                     <th
                                         className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                        {t('description.client')}
+                                    </th>
+                                    <th
+                                        className="px-3 py-3 border-b-2 border-gray-200 bg-gray-100 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                                         {t('description.actions')}
                                     </th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {props.clientKeys.map((clientKey, index) => {
+                                {props.productKeys.map((productKey, index) => {
                                     return (
-                                        <tr key={clientKey.id}>
+                                        <tr key={productKey.id} className={needHide(productKey.id)}>
 
-                                            <td className="px-5 py-150 border-b border-gray-200 bg-white text-sm text-center">
+                                            <td className="px-5 py-3 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                    <Link to={String(clientKey.id)}>{clientKey.name}</Link>
-                                                    
+                                                    <Link to={pathEdit(productKey)}>{productKey.name}</Link>
                                                 </div>
-                                            </td>  
-                                            {statusKey(clientKey.status)}
+                                            </td>
+                                            {statusKey(productKey.status)}
                                             <td className={clasStatusKey}>
-                                                <div className="text-gray-900 whitespace-no-wrap">                                                    
+                                                <div className="text-gray-900 whitespace-no-wrap">
                                                     {status}
                                                 </div>
-                                            </td> 
-                                            <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                                            </td>
+                                            <td className="px-3 py-3 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                    {durationDescription(clientKey.duration)}
+                                                    {durationDescription(productKey.duration)}
                                                     {duration}
                                                 </div>
-                                            </td>                                                                                      
-                                            
-                                            
-                                            <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
-                                                <p className="text-gray-900 whitespace-no-wrap">{clientKey.comment}</p>
+                                            </td>
+
+
+                                            <td className="px-3 py-3 border-b border-gray-200 bg-white text-sm text-center">
+                                                <p className="text-gray-900 whitespace-no-wrap">{productKey.comment}</p>
                                             </td>
                                             <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                {clientKey.type_key}
+                                                    {productKey.type_of_key}
                                                 </div>
                                             </td>
                                             <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
-                                                    {clientKey.created_at}
+                                                    {output_date(productKey.created_at)}
                                                 </div>
                                             </td>
 
                                             <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
+                                                    <Link to={`/clients/${String(PkClientId(productKey['client']))}`}>{PkClient(productKey['client'])}</Link>
+                                                </div>
+                                            </td>
+                                            <td className="px-3 py-5 border-b border-gray-200 bg-white text-sm text-center">
+                                                <div className="text-gray-900 whitespace-no-wrap">
 
-                                                    <div className="flex items-stretch ...">
-
-                                                        <button
-                                                            onClick={() => editClientKey(clientKey.id)}                                                            
-                                                            className='relative inline-flex text-sx sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-                                                             text-white bg-[#4040F2] hover:bg-[#3333D1] focus:border-[#B3B3FD] focus:bg-[#4040F2] mx-1 px-4 py-1 xs:py-1.5 xs:px-5'
-
-                                                        >
-                                                            {t('description.edit')}
-                                                        </button>
-
+                                                    <div className="items-center ...">
 
                                                         <button
                                                             className='relative inline-flex text-xs sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
-                                                            text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
-                                                            onClick={() => deleteProductKey(clientKey.id, clientKey.name)}
-                                                            
+                                                            text-white bg-[#3333D1] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
+                                                            onClick={() => deleteProductKey(productKey.id, productKey.name)}
+
                                                         >
                                                             {t('description.delete')}
                                                         </button>
                                                     </div>
                                                 </div>
                                             </td>
+
+
                                         </tr>
                                     )
                                 })}
                             </tbody>
-                           
                         </table>
                     </div>
                 </div>
@@ -232,10 +253,13 @@ export default function ClientKeysTable(props) {
         </div>
     )
 
-    if (localStorage.getItem('loadingClientKeys') == 'true') {
+    console.log('PKT')
+    console.log(localStorage.getItem('loadingKeys'))
+    
+
+    if (localStorage.getItem('loadingKeys') == 'true') {
         return loadingSection
     } else {
         return dataSection
     }
 }
-

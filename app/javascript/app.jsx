@@ -19,9 +19,17 @@ import TypeOfKeyNew from "./components/types_of_keys/type_of_key_new"
 import TypeOfKeyEdit from "./components/types_of_keys/type_of_key_edit"
 import ProductKeyNew from "./components/product_keys/product_keys_new"
 import ClientKeys from "./components/product_keys/client_keys"
+import ProductKeys from "./components/product_keys/product_keys"
 import ProductKeyEdit from "./components/product_keys/product_key_edit"
 
+
+
+
 function App() {
+
+    localStorage.setItem('loadingClientKeys', true);
+    localStorage.setItem('loadingKeys', true);
+
     return (
         <div>
             <UpperElements />
@@ -40,6 +48,7 @@ function App() {
                 <Route path="clients/:client_id/product_keys/new" element={<ProductKeyNew />} />
                 <Route path="clients/:client_id/product_keys" element={<ClientKeys />} />
                 <Route path="clients/:client_id/product_keys/:id/edit" element={<ProductKeyEdit />} />
+                <Route path="product_keys/" element={<ProductKeys />} />
             </Routes>
             </BrowserRouter>
         </div>
