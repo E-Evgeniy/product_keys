@@ -18,7 +18,6 @@ const Client = () => {
         fetch(apiEndpoint)
             .then(response => response.json())
             .then(data => {
-                console.log(data['rezult'])
                 setGetFreeKey(data["rezult"])
             }
             );

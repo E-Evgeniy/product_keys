@@ -63,7 +63,6 @@ export default function Clients() {
             );
     }, [searchFileld, localStorage.getItem('loadingKeys')])
 
-    console.log(localStorage.getItem('loadingKeys'))
 
     const lastObjectsIndex = currentPage * objectsPerPage
     const firstObjectsIndex = lastObjectsIndex - objectsPerPage

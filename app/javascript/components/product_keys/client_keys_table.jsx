@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
+import Modal from 'react-modal';
 
 export default function ClientKeysTable(props) {
     const [nameClient, setNameClient] = useState('')
+    let [showModal, setShowModal] = useState(false)
+    const [currentKey, setCurrentKey] = useState()
+    const [currentKeyId, setCurrentKeyId] = useState()
 
     const { t } = useTranslation();
 
@@ -29,6 +33,12 @@ export default function ClientKeysTable(props) {
         });
         window.location.replace(`${localStorage.getItem('pageClientKeys')}`);
 
+    };
+
+    const deleteProductKey = (id, name) => {
+        setCurrentKey(name)
+        setCurrentKeyId(id)
+        setShowModal(true)
     };
 
     let status = t('description.no_active')
@@ -68,6 +78,36 @@ export default function ClientKeysTable(props) {
     const loadingSection = (<div>{t('description.loading')}</div>)
 
     const dataSection = (
+        <div>
+
+<Modal
+                isOpen={showModal}
+                ariaHideApp={false}
+                onRequestClose={() => setShowModal(false)} >
+                <div className="bg-slate-800 bg-opacity-50 flex justify-center items-center absolute top-0 right-0 bottom-0 left-0">
+                    <div className="bg-white px-16 py-14 rounded-md text-center">
+                        <h1 className="text-xl mb-4 font-bold text-slate-500">{t('description.delete_key')} {currentKey} </h1>
+                        <button 
+                          className="bg-red-500 px-4 py-2 rounded-md text-md text-white"
+                          onClick={() => {
+                            
+                            deleteClientKey(currentKeyId);                           
+                            setShowModal(false)
+                            
+                        }}
+                          > {t('description.delete')}
+                        </button>
+
+                        <button 
+                          className="bg-indigo-500 px-7 py-2 ml-2 rounded-md text-md text-white font-semibold"
+                          onClick={() => {
+                            localStorage.setItem('loadingKeys', true);
+                            setShowModal(false);
+                            }}>
+                            {t('description.cancel')}</button>
+                    </div>
+                </div>
+            </Modal>
 
         <div className="bg-white p-8 rounded-md w-full">
 
@@ -171,7 +211,7 @@ export default function ClientKeysTable(props) {
                                                         <button
                                                             className='relative inline-flex text-xs sm:text-base rounded-full font-medium border-2 border-transparent transition-colors outline-transparent focus:outline-transparent disabled:opacity-50 disabled:pointer-events-none disabled:opacity-40 disabled:hover:opacity-40 disabled:cursor-not-allowed disabled:shadow-none
                                                             text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#4040F2] px-4 py-1 xs:py-1.5 xs:px-5'
-                                                            onClick={() => deleteClientKey(clientKey.id)}
+                                                            onClick={() => deleteProductKey(clientKey.id, clientKey.name)}
                                                             
                                                         >
                                                             {t('description.delete')}
@@ -188,6 +228,7 @@ export default function ClientKeysTable(props) {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 

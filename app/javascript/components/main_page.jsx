@@ -16,8 +16,7 @@ export default function MainPage() {
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="/clients/new" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.cilent_new')}</a></li>
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="/clients" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.clients')}</a></li>
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="/product_keys" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.product_keys')}</a></li>
-                                    <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="/types_of_keys" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.types_of_keys')}</a></li>
-                                    <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="#" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.report')}</a></li>
+                                    <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="/types_of_keys" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.types_of_keys')}</a></li>                                    
                                     <li className="py-3  hover:bg-indigo-200"><a href="#" className="list-none border-b-2 hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.exit')}</a></li>
                                 </div>
                             </div>

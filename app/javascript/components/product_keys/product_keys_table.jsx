@@ -8,6 +8,7 @@ export default function ProducrKeysTable(props) {
 
     const [currentKey, setCurrentKey] = useState()
     const [currentKeyId, setCurrentKeyId] = useState()
+    const [delKey, setDelKey] = useState([])
     let [showModal, setShowModal] = useState(false)
     
 
@@ -63,6 +64,19 @@ export default function ProducrKeysTable(props) {
         )
     }
 
+    const needHide = (id) => {
+
+        let needHid = "invisible"
+
+        console.log(`delKey.indexOf ${delKey}`)
+
+        if (delKey.indexOf(id) == -1) {
+            needHid = "visible"
+        }
+
+        return needHid
+    }
+
     const pathEdit = (data_pk) => {
         if (data_pk['client'] != null) {
             return (`/clients/${data_pk['client']['id']}/product_keys/${data_pk.id}/edit?loc=/product_keys`)
@@ -106,7 +120,9 @@ export default function ProducrKeysTable(props) {
                           onClick={() => {
                             
                             RequestDeleteProductKey(currentKeyId);
-                            localStorage.setItem('loadingKeys', true);
+                            let buffer_key = delKey
+                            buffer_key.push(currentKeyId)
+                            setDelKey(buffer_key)                            
                             setShowModal(false)
                             
                         }}
@@ -169,7 +185,7 @@ export default function ProducrKeysTable(props) {
                             <tbody>
                                 {props.productKeys.map((productKey, index) => {
                                     return (
-                                        <tr key={productKey.id}>
+                                        <tr key={productKey.id} className={needHide(productKey.id)}>
 
                                             <td className="px-5 py-3 border-b border-gray-200 bg-white text-sm text-center">
                                                 <div className="text-gray-900 whitespace-no-wrap">
@@ -238,6 +254,10 @@ export default function ProducrKeysTable(props) {
         </div>
         </div>
     )
+
+    console.log('PKT')
+    console.log(localStorage.getItem('loadingKeys'))
+    
 
     if (localStorage.getItem('loadingKeys') == 'true') {
         return loadingSection
