@@ -1,32 +1,14 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-modal';
 
-export default function ClientsTable() {
-    const [loading, setloading] = useState(true)
-    const [loadedClients, setLoadedClients] = useState([])
-    const [findName, setFindName] = useState('')
-    const [findEmail, setFindEmail] = useState('')
-    const [findComment, setFindComment] = useState('')
-    const [searchFileld, setSearchFileld] = useState('')
+export default function ClientsTable(props) {
+    
     const [currentClient, setCurrentClient] = useState()
     const [currentClientId, setCurrentClientId] = useState()
     let [showModal, setShowModal] = useState(false)
     const { t } = useTranslation();
-
-    useEffect(() => {
-        //Get clients
-
-        const apiEndpoint = `/api/v1/clients?findName=${findName}&findEmail=${findEmail}&findComment=${findComment}`
-        fetch(apiEndpoint)
-            .then(response => response.json())
-            .then(data => {
-                setLoadedClients(data["clients"])
-                setloading(false)
-            }
-            );
-    }, [searchFileld, loading])
 
     const RequestDeleteClient = async (id) => {
         await fetch(`/api/v1/clients/${id}`, {
@@ -36,7 +18,6 @@ export default function ClientsTable() {
                 return response.json()
               }
         });
-        setloading(true)
     };
 
     const deleteClient = (id, name) => {
@@ -59,21 +40,6 @@ export default function ClientsTable() {
         return (
             volume_date.split('T')[0] + ' ' + output_time
         )
-    }
-
-    const onChangeName = (e) => {
-        setFindName(e.target.value);
-        setSearchFileld(e.target.value);
-    }
-
-    const onChangeEmail = (e) => {
-        setFindEmail(e.target.value);
-        setSearchFileld(e.target.value);
-    }
-
-    const onChangeComment = (e) => {
-        setFindComment(e.target.value);
-        setSearchFileld(e.target.value);
     }
 
     const dataSection = (
@@ -105,64 +71,7 @@ export default function ClientsTable() {
             </Modal>
             <div className="bg-white p-8 rounded-md w-full">
 
-                <div className="items-center">
-                    <h2 className="me-2 text-2xl text-gray-900 font-semibold text-center">{t('description.clients')}</h2>
-                    <br></br>
-                </div>
-
-                <div className=" flex items-center justify-between pb-6">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-[#07074D] font-semibold px-2">{t('description.name')}</h1>
-                        </div>
-                        <div className="flex bg-gray-200 items-center p-2 rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#07074D]" viewBox="0 0 20 20"
-                                fill="currentColor">
-                            </svg>
-                            <input
-                                className="w-48 bg-gray-50 outline-none ml-1 block "
-                                type="text"
-                                placeholder={t('description.name')}
-                                onChange={onChangeName}
-                            >
-                            </input>
-                        </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-[#07074D] font-semibold px-2">{t('description.email')}</h1>
-                        </div>
-                        <div className="flex bg-gray-200 items-center p-2 rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#07074D]" viewBox="0 0 20 20"
-                                fill="currentColor">
-                            </svg>
-                            <input
-                                className="w-48 bg-gray-50 outline-none ml-1 block "
-                                type="text"
-                                placeholder={t('description.email')}
-                                onChange={onChangeEmail}
-                            >
-                            </input>
-                        </div>
-                    </div>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-[#07074D] font-semibold px-2">{t('description.comment')}</h1>
-                        </div>
-                        <div className="flex bg-gray-200 items-center p-2 rounded-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-[#07074D]" viewBox="0 0 20 20"
-                                fill="currentColor">
-                            </svg>
-                            <input
-                                className="w-48 bg-gray-50 outline-none ml-1 block "
-                                type="text"
-                                placeholder={t('description.comment')}
-                                onChange={onChangeComment}
-                            >
-                            </input>
-                        </div>
-                    </div>
-                </div>
+               
                 <div>
                     <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
                         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
@@ -200,7 +109,7 @@ export default function ClientsTable() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {loadedClients.map((client, index) => {
+                                    {props.loadedClients.map((client, index) => {
                                         return (
                                             <tr key={client.id}>
 
@@ -270,7 +179,7 @@ text-white bg-[#f87171] hover:bg-[#7f1d1d] focus:border-[#B3B3FD] focus:bg-[#f87
         </div>
     )
 
-    if (loading) {
+    if (props.loading) {
         return loadingSection
     } else {
         return dataSection
