@@ -1,8 +1,9 @@
-import React, { useState, useEffect, Component } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 
 import ClientsTable from "./clients_table"
+import Pagination from "../pagination";
 
 
 export default function Clients() {
@@ -12,6 +13,9 @@ export default function Clients() {
     const [searchFileld, setSearchFileld] = useState('')
     const [loadedClients, setLoadedClients] = useState([])
     const [loading, setloading] = useState(true)
+
+    const [currentPage, setCurrentPage] = useState(1)
+    const [objectsPerPage] = useState(5)
 
     const { t } = useTranslation();
 
@@ -48,6 +52,11 @@ export default function Clients() {
             'list-none  hover:text-indigo-900 hover:text-lg hover:font-bold'
         )
     }
+
+    const lastObjectsIndex = currentPage * objectsPerPage
+    const firstObjectsIndex = lastObjectsIndex - objectsPerPage
+    const currentObjects = loadedClients.slice(firstObjectsIndex, lastObjectsIndex)
+    const paginate = pageNumber => setCurrentPage(pageNumber)
 
     return (
         <div>
@@ -124,7 +133,8 @@ export default function Clients() {
                         </div>
                     </div>
                 </div>
-                            <ClientsTable loadedClients={loadedClients} loading={loading}/>
+                            <ClientsTable loadedClients={currentObjects} loading={loading}/>
+                            < Pagination objectsPerPage={objectsPerPage} totalObjects={loadedClients.length} paginate={paginate} />
                         </div>
                     </div>
                 </section>

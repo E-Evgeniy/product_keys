@@ -68,8 +68,6 @@ export default function ProducrKeysTable(props) {
 
         let needHid = "invisible"
 
-        console.log(`delKey.indexOf ${delKey}`)
-
         if (delKey.indexOf(id) == -1) {
             needHid = "visible"
         }

@@ -7,6 +7,8 @@ export default function ClientsTable(props) {
     
     const [currentClient, setCurrentClient] = useState()
     const [currentClientId, setCurrentClientId] = useState()
+    const [delClient, setDelClient] = useState([])
+
     let [showModal, setShowModal] = useState(false)
     const { t } = useTranslation();
 
@@ -42,6 +44,17 @@ export default function ClientsTable(props) {
         )
     }
 
+    const needHide = (id) => {
+
+        let needHid = "invisible"
+
+        if (delClient.indexOf(id) == -1) {
+            needHid = "visible"
+        }
+
+        return needHid
+    }
+
     const dataSection = (
         <div>
             <Modal
@@ -56,6 +69,9 @@ export default function ClientsTable(props) {
                           onClick={() => {
                             
                             RequestDeleteClient(currentClientId);
+                            let buffer_client = delClient
+                            buffer_client.push(currentClientId)
+                            setDelClient(buffer_client)
                             setShowModal(false)
                             
                         }}
@@ -111,7 +127,7 @@ export default function ClientsTable(props) {
                                 <tbody>
                                     {props.loadedClients.map((client, index) => {
                                         return (
-                                            <tr key={client.id}>
+                                            <tr key={client.id} className={needHide(client.id)}>
 
                                                 <td className="text-center px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                     <div className="text-gray-900 whitespace-no-wrap">

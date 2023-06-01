@@ -14,7 +14,7 @@ export default function Clients() {
     const [statusKeyFind, setStatusKeyFind] = useState('');
     const [productKeys, setProductKeys] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
-    const [objectsPerPage] = useState(10)
+    const [objectsPerPage] = useState(5)
 
     const { t } = useTranslation();
 
