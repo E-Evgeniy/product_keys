@@ -45,6 +45,8 @@ gem "bootsnap", require: false
 gem 'jsbundling-rails'
 gem 'cssbundling-rails'
 
+gem 'devise'
+
 # Use Sass to process CSS
 # gem "sassc-rails"
 
@@ -72,4 +74,5 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+  gem 'launchy'
 end
