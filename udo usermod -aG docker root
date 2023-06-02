@@ -1,0 +1,21 @@
+[0;1;32m●[0m docker.service - Docker Application Container Engine
+     Loaded: loaded (/lib/systemd/system/docker.service; enabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Fri 2023-06-02 13:19:41 MSK; 22s ago
+TriggeredBy: [0;1;32m●[0m docker.socket
+       Docs: https://docs.docker.com
+   Main PID: 37082 (dockerd)
+      Tasks: 8
+     Memory: 32.6M
+     CGroup: /system.slice/docker.service
+             └─37082 /usr/bin/dockerd -H fd:// --containerd=/run/containerd/containerd.sock
+
+июн 02 13:19:40 evg-vb dockerd[37082]: time="2023-06-02T13:19:40.360510004+03:00" level=info msg="Starting up"
+июн 02 13:19:40 evg-vb dockerd[37082]: time="2023-06-02T13:19:40.363742301+03:00" level=info msg="detected 127.0.0.53 nameserver, assuming systemd-resolved, so using resolv.conf: /run/systemd/resolve/resolv.conf"
+июн 02 13:19:40 evg-vb dockerd[37082]: time="2023-06-02T13:19:40.602887613+03:00" level=info msg="[graphdriver] using prior storage driver: overlay2"
+июн 02 13:19:40 evg-vb dockerd[37082]: time="2023-06-02T13:19:40.616115748+03:00" level=info msg="Loading containers: start."
+июн 02 13:19:40 evg-vb dockerd[37082]: time="2023-06-02T13:19:40.881609372+03:00" level=info msg="Default bridge (docker0) is assigned with an IP address 172.17.0.0/16. Daemon option --bip can be used to set a preferred IP address"
+июн 02 13:19:40 evg-vb dockerd[37082]: time="2023-06-02T13:19:40.958797466+03:00" level=info msg="Loading containers: done."
+июн 02 13:19:41 evg-vb dockerd[37082]: time="2023-06-02T13:19:41.105067216+03:00" level=info msg="Docker daemon" commit=659604f graphdriver=overlay2 version=24.0.2
+июн 02 13:19:41 evg-vb dockerd[37082]: time="2023-06-02T13:19:41.106055799+03:00" level=info msg="Daemon has completed initialization"
+июн 02 13:19:41 evg-vb dockerd[37082]: time="2023-06-02T13:19:41.141433396+03:00" level=info msg="API listen on /run/docker.sock"
+июн 02 13:19:41 evg-vb systemd[1]: Started Docker Application Container Engine.
