@@ -1,0 +1,56 @@
+# Name of your application. Used to uniquely configure containers.
+service: product-keys
+
+# Name of the container image.
+image: evgev/product-keys
+
+# Deploy to these servers.
+servers:
+  - 185.22.61.211
+
+# Credentials for your image host.
+registry:
+  # Specify the registry server, if you're not using Docker Hub
+  # server: registry.digitalocean.com / ghcr.io / ...
+  username: evgev
+
+  # Always use an access token rather than real password when possible.
+  password:
+    - MRSK_REGISTRY_PASSWORD
+
+# Inject ENV variables into containers (secrets come from .env).
+env:
+  clear:
+    DATABASE_URL: postgres://postgres@185.22.61.211/pkbase_production
+    RAILS_LOG_TO_STDOUT: 1
+    RAILS_SERVE_STATIC_FILES: 1
+    REDIS_URL: redis://185.22.61.211:6379/0
+
+  secret:
+    - RAILS_MASTER_KEY
+
+builder:
+  multiarch: false
+  args:
+    RUBY_VERSION: 3.1.0
+
+accessories:
+  redis:
+    image: redis:6.2.12-alpine
+    hosts:
+      - 185.22.61.211
+    volumes:
+      - redis:/data
+    port: 6379
+
+
+  postgres:
+    image: postgres:14.6-alpine
+    hosts:
+      - 185.22.61.211
+    port: 5432
+    volumes:
+      - postgres:/var/lib/postgresql/data:cached
+    env:
+      clear:
+        POSTGRES_HOST_AUTH_METHOD: trust
