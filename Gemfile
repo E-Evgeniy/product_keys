@@ -76,3 +76,5 @@ group :test do
   gem "webdrivers"
   gem 'launchy'
 end
+
+gem "mrsk", "0.11.0"
