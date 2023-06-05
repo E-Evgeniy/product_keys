@@ -14,10 +14,9 @@ module Api
             comment: client.comment,
             created_at: client.created_at,
             activy_keys: client.product_keys.where(status: true).count,
-            all_keys: client.product_keys.count,
+            all_keys: client.product_keys.count
           }
         end
-
         render(json: { clients: })
       end
 
@@ -97,7 +96,7 @@ module Api
 
         if (params[:changeName] == 'false' && params[:client_id] == '') || (params[:changeName] == 'true' && params[:nameClient] == '')
           client_data['client_allowed'] = true
-          client_data['client_id'] = ''        
+          client_data['client_id'] = ''
         else
           client_data = forming_client_data(client_data, params[:changeName], params[:client_id], params[:nameClient])          
         end
@@ -106,21 +105,21 @@ module Api
       end
 
       def find_client_name
-        if params[:client_id].empty?
-          client_name = ''
-        else
-          client_name = Client.find(params[:client_id]).name
-        end
+        client_name = if params[:client_id].empty?
+                        ''
+                      else
+                        Client.find(params[:client_id]).name
+                      end
 
         render(json: { client_name: })
-      end      
+      end
 
       private
 
       def get_clients(params)
         result_find = find_name(params[:findName])
-        result_find = find_next('email', params[:findEmail], result_find) if !params[:findEmail].empty?
-        result_find = find_next('comment', params[:findComment], result_find) if !params[:findComment].empty?
+        result_find = find_next('email', params[:findEmail], result_find) unless params[:findEmail].empty?
+        result_find = find_next('comment', params[:findComment], result_find) unless params[:findComment].empty?
 
         result_find
       end

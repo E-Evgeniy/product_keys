@@ -112,7 +112,7 @@ const TypesOfKeysTable = () => {
 
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                                                 <p className="text-gray-900 whitespace-no-wrap">
-                                                    <Link to={String(type_key.id)}>{type_key.name}</Link>
+                                                  {type_key.name}
                                                 </p>
                                             </td>
                                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">

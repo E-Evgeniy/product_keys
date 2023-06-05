@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 export default function UpperElements() {
     const { t } = useTranslation();
     const classNameUpElement = "text-gray-700 hover:text-indigo-600 text-md "
+
     return (
         <div>
             <header>
@@ -24,10 +25,6 @@ export default function UpperElements() {
                                     <li><a href="/product_keys" className="text-gray-700 hover:text-indigo-600 text-md ">{t('description.product_keys')}</a></li>
                                     
                                 </ul>
-
-                                <div className="md:flex items-center hidden space-x-4 ml-8 lg:ml-12">
-                                    <h1 className="text-text-gray-600  py-2 hover:cursor-pointer hover:text-indigo-600">WELCOME</h1>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -36,6 +33,3 @@ export default function UpperElements() {
         </div>
     )
 }
-
-// Add some javascript to replace the div where = 'places-list-container'
-// with com=ntent render above
