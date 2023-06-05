@@ -49,7 +49,7 @@ const ClientKeys = () => {
                                 <div className="bg-white rounded-md list-none  text-center ">
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><NavLink to={`/clients/${client_id}/product_keys/new`} className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.new_key')}</NavLink></li>
                                     <li className="py-3 border-b-2  hover:bg-indigo-200"><a href="/clients" className="list-none  hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.clients')}</a></li>
-                                    <li className="py-3  hover:bg-indigo-200"><a href="#" className="list-none border-b-2 hover:text-indigo-900 hover:text-lg hover:font-bold">ВЫЙТИ!</a></li>
+                                    <li className="py-3  hover:bg-indigo-200"><a href="/api/v1/user/user_destroy_session" className="list-none border-b-2 hover:text-indigo-900 hover:text-lg hover:font-bold">{t('description.exit')}</a></li>
                                 </div>
                             </div>
                         </div>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users, only: %i[sessions]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ('/')
@@ -9,6 +10,8 @@ Rails.application.routes.draw do
   get '/api/v1/client/product_keys', to: 'api/v1/clients#client_keys'
   get '/api/v1/client/check_name_for_edit_key', to: 'api/v1/clients#check_name_for_edit_key'
   get '/api/v1/client/find_client_name', to: 'api/v1/clients#find_client_name'
+
+  get '/api/v1/user/user_destroy_session', to: 'api/v1/users#user_destroy_session'
 
   namespace :api do
     namespace :v1 do
